@@ -2,27 +2,1438 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
     <title>CLOUD KEEPER ☁</title>
-    <meta name="description" content="완벽하지 않아도 괜찮은 — 쉼과 힐링의 To-do 앱" />
     <meta name="theme-color" content="#6e8459" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Cloud Keeper" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
-    <link rel="icon" type="image/png" href="/icon-192.png" />
-    <link rel="manifest" href="/manifest.json" />
-    <script type="module" crossorigin src="/assets/index-EsBDrmz6.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-B_K_VjkH.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js');
-        });
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      // ════════════════════════════════════════════════════════════
+      //   PIXEL ICONS  (16x16 viewBox, hand-pixeled rectangles)
+      // ════════════════════════════════════════════════════════════
+      const PixelTasksIcon = ({ size = 32 }) => (
+        <svg
+          viewBox="0 0 16 16"
+          width={size}
+          height={size}
+          shapeRendering="crispEdges"
+          style={{ imageRendering: "pixelated" }}
+        >
+          <rect x="6" y="0" width="4" height="2" fill="#2a3a25" />
+          <rect x="3" y="1" width="10" height="14" fill="#2a3a25" />
+          <rect x="4" y="2" width="8" height="12" fill="#ebe4b8" />
+          <rect x="7" y="0" width="2" height="1" fill="#5a4a35" />
+          <rect x="5" y="4" width="1" height="2" fill="#6e8459" />
+          <rect x="6" y="5" width="1" height="1" fill="#6e8459" />
+          <rect x="7" y="4" width="1" height="1" fill="#6e8459" />
+          <rect x="8" y="3" width="1" height="1" fill="#6e8459" />
+          <rect x="9" y="4" width="2" height="1" fill="#3a4a35" />
+          <rect x="5" y="8" width="6" height="1" fill="#3a4a35" />
+          <rect x="5" y="10" width="6" height="1" fill="#3a4a35" />
+          <rect x="5" y="12" width="4" height="1" fill="#3a4a35" />
+        </svg>
+      );
+
+      const PixelGardenIcon = ({ size = 32 }) => (
+        <svg
+          viewBox="0 0 16 16"
+          width={size}
+          height={size}
+          shapeRendering="crispEdges"
+          style={{ imageRendering: "pixelated" }}
+        >
+          <rect x="6" y="1" width="2" height="2" fill="#b87798" />
+          <rect x="9" y="1" width="2" height="2" fill="#b87798" />
+          <rect x="5" y="2" width="6" height="3" fill="#b87798" />
+          <rect x="6" y="5" width="4" height="1" fill="#b87798" />
+          <rect x="6" y="2" width="2" height="1" fill="#e2a8c0" />
+          <rect x="9" y="2" width="1" height="1" fill="#e2a8c0" />
+          <rect x="7" y="3" width="2" height="1" fill="#f5d878" />
+          <rect x="7" y="6" width="2" height="2" fill="#5a7a4a" />
+          <rect x="3" y="8" width="10" height="2" fill="#2a3a25" />
+          <rect x="4" y="9" width="8" height="1" fill="#a8784a" />
+          <rect x="4" y="10" width="8" height="5" fill="#7a4a32" />
+          <rect x="5" y="11" width="6" height="3" fill="#a8784a" />
+          <rect x="6" y="12" width="2" height="1" fill="#c8966a" />
+        </svg>
+      );
+
+      const PixelDiaryIcon = ({ size = 32 }) => (
+        <svg
+          viewBox="0 0 16 16"
+          width={size}
+          height={size}
+          shapeRendering="crispEdges"
+          style={{ imageRendering: "pixelated" }}
+        >
+          <rect x="2" y="2" width="12" height="12" fill="#2a3a25" />
+          <rect x="3" y="3" width="10" height="10" fill="#a85a5a" />
+          <rect x="3" y="3" width="2" height="10" fill="#7a3a3a" />
+          <rect x="6" y="5" width="6" height="1" fill="#ebe4b8" />
+          <rect x="6" y="7" width="5" height="1" fill="#ebe4b8" />
+          <rect x="7" y="9" width="1" height="1" fill="#f5b8d8" />
+          <rect x="9" y="9" width="1" height="1" fill="#f5b8d8" />
+          <rect x="6" y="10" width="4" height="1" fill="#f5b8d8" />
+          <rect x="7" y="11" width="2" height="1" fill="#f5b8d8" />
+        </svg>
+      );
+
+      const PixelSoundsIcon = ({ size = 32 }) => (
+        <svg
+          viewBox="0 0 16 16"
+          width={size}
+          height={size}
+          shapeRendering="crispEdges"
+          style={{ imageRendering: "pixelated" }}
+        >
+          <rect x="1" y="3" width="14" height="10" fill="#2a3a25" />
+          <rect x="2" y="4" width="12" height="8" fill="#5e8580" />
+          <rect x="3" y="5" width="10" height="3" fill="#1a2a25" />
+          <rect x="4" y="6" width="2" height="1" fill="#a4c089" />
+          <rect x="10" y="6" width="2" height="1" fill="#a4c089" />
+          <rect x="6" y="6" width="4" height="1" fill="#3a4a4a" />
+          <rect x="3" y="9" width="10" height="3" fill="#ebe4b8" />
+          <rect x="4" y="10" width="2" height="1" fill="#a85a5a" />
+          <rect x="7" y="10" width="2" height="1" fill="#3a4a35" />
+          <rect x="10" y="10" width="2" height="1" fill="#3a4a35" />
+        </svg>
+      );
+
+      const PixelBinIcon = ({ size = 32 }) => (
+        <svg
+          viewBox="0 0 16 16"
+          width={size}
+          height={size}
+          shapeRendering="crispEdges"
+          style={{ imageRendering: "pixelated" }}
+        >
+          <rect x="6" y="1" width="4" height="1" fill="#2a3a25" />
+          <rect x="2" y="3" width="12" height="1" fill="#2a3a25" />
+          <rect x="3" y="2" width="10" height="2" fill="#5a7a4a" />
+          <rect x="4" y="3" width="2" height="1" fill="#7a9a6a" />
+          <rect x="3" y="4" width="10" height="11" fill="#2a3a25" />
+          <rect x="4" y="5" width="8" height="9" fill="#7a9a8a" />
+          <rect x="5" y="6" width="1" height="7" fill="#3a4a35" />
+          <rect x="8" y="6" width="1" height="7" fill="#3a4a35" />
+          <rect x="11" y="6" width="1" height="7" fill="#3a4a35" />
+        </svg>
+      );
+
+      const PixelStartIcon = ({ size = 16 }) => (
+        <svg
+          viewBox="0 0 16 16"
+          width={size}
+          height={size}
+          shapeRendering="crispEdges"
+          style={{ imageRendering: "pixelated" }}
+        >
+          <rect x="4" y="3" width="2" height="2" fill="#b87798" />
+          <rect x="10" y="3" width="2" height="2" fill="#b87798" />
+          <rect x="3" y="4" width="10" height="3" fill="#b87798" />
+          <rect x="4" y="7" width="8" height="2" fill="#b87798" />
+          <rect x="5" y="9" width="6" height="1" fill="#b87798" />
+          <rect x="6" y="10" width="4" height="1" fill="#b87798" />
+          <rect x="7" y="11" width="2" height="1" fill="#b87798" />
+          <rect x="4" y="4" width="1" height="1" fill="#e2a8c0" />
+          <rect x="11" y="4" width="1" height="1" fill="#e2a8c0" />
+        </svg>
+      );
+
+      const PixelCloudIcon = ({ size = 28, color = "#ebe4b8" }) => (
+        <svg
+          viewBox="0 0 16 16"
+          width={size}
+          height={size}
+          shapeRendering="crispEdges"
+          style={{ imageRendering: "pixelated" }}
+        >
+          <rect x="4" y="6" width="2" height="1" fill={color} />
+          <rect x="10" y="6" width="2" height="1" fill={color} />
+          <rect x="3" y="7" width="10" height="3" fill={color} />
+          <rect x="2" y="8" width="12" height="2" fill={color} />
+          <rect x="3" y="10" width="10" height="1" fill={color} />
+        </svg>
+      );
+
+      const PixelHydrangeaArt = ({ size = 96 }) => (
+        <svg
+          viewBox="0 0 32 32"
+          width={size}
+          height={size}
+          shapeRendering="crispEdges"
+          style={{ imageRendering: "pixelated" }}
+        >
+          <rect x="10" y="2" width="4" height="2" fill="#b87798" />
+          <rect x="18" y="2" width="4" height="2" fill="#9d6b9b" />
+          <rect x="8" y="4" width="16" height="3" fill="#b87798" />
+          <rect x="6" y="7" width="20" height="3" fill="#b87798" />
+          <rect x="9" y="10" width="14" height="2" fill="#9d6b9b" />
+          <rect x="11" y="3" width="2" height="1" fill="#e2a8c0" />
+          <rect x="14" y="5" width="2" height="2" fill="#e2a8c0" />
+          <rect x="20" y="5" width="2" height="2" fill="#e2a8c0" />
+          <rect x="9" y="7" width="2" height="2" fill="#e2a8c0" />
+          <rect x="13" y="6" width="1" height="1" fill="#f5d878" />
+          <rect x="19" y="6" width="1" height="1" fill="#f5d878" />
+          <rect x="16" y="9" width="1" height="1" fill="#f5d878" />
+          <rect x="3" y="11" width="6" height="2" fill="#5a7a4a" />
+          <rect x="2" y="12" width="6" height="3" fill="#5a7a4a" />
+          <rect x="4" y="13" width="2" height="1" fill="#7a9a6a" />
+          <rect x="23" y="11" width="6" height="2" fill="#5a7a4a" />
+          <rect x="24" y="12" width="6" height="3" fill="#5a7a4a" />
+          <rect x="26" y="13" width="2" height="1" fill="#7a9a6a" />
+          <rect x="15" y="12" width="2" height="6" fill="#5a7a4a" />
+          <rect x="6" y="18" width="20" height="2" fill="#2a3a25" />
+          <rect x="7" y="19" width="18" height="1" fill="#a8784a" />
+          <rect x="7" y="20" width="18" height="9" fill="#7a4a32" />
+          <rect x="8" y="21" width="16" height="7" fill="#a8784a" />
+          <rect x="9" y="22" width="3" height="2" fill="#c8966a" />
+          <rect x="6" y="29" width="20" height="1" fill="#2a3a25" />
+        </svg>
+      );
+
+      // ════════════════════════════════════════════════════════════
+      //   VIEW: TASKS
+      // ════════════════════════════════════════════════════════════
+      function TasksView({
+        energy,
+        setEnergy,
+        tasks,
+        handleSkip,
+        handleDone,
+        hydrangea,
+        waterCount,
+        isMicroMode,
+      }) {
+        const blocks = [
+          {
+            key: "morning",
+            title: "오전 워밍업",
+            subtitle: "MORNING",
+            icon: "☀",
+          },
+          {
+            key: "afternoon",
+            title: "오후 여백",
+            subtitle: "AFTERNOON",
+            icon: "✿",
+          },
+          {
+            key: "evening",
+            title: "저녁 100M",
+            subtitle: "EVENING",
+            icon: "☾",
+          },
+        ];
+        const getVisible = (key) =>
+          tasks.filter((t) => t.block === key && (!isMicroMode || t.isMicro));
+        const getHidden = (key) =>
+          isMicroMode ? tasks.filter((t) => t.block === key && !t.isMicro) : [];
+
+        return (
+          <div className="space-y-3">
+            <div className="pixel-card p-3 flex gap-3 items-center">
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-press text-[10px] text-olive-dark">
+                    ▸ MOTIVATION TEMP
+                  </span>
+                  <span className="font-press text-sm text-rose">
+                    {energy}/10
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={1}
+                  max={10}
+                  value={energy}
+                  onChange={(e) => setEnergy(Number(e.target.value))}
+                  className="pixel-slider w-full"
+                />
+                <div className="flex justify-between mt-1 font-press text-[8px] text-olive-dark/70">
+                  <span>EXHAUST</span>
+                  <span>RADIANT</span>
+                </div>
+              </div>
+              <div className="pixel-inset px-3 py-2 text-center min-w-[70px]">
+                <div className="text-2xl leading-none">{hydrangea.emoji}</div>
+                <div className="font-press text-[8px] text-olive-dark mt-1">
+                  💧{waterCount}
+                </div>
+              </div>
+            </div>
+
+            <div
+              className={`pixel-chip ${isMicroMode ? "pixel-chip-rose" : "pixel-chip-sky"}`}
+            >
+              <span>{isMicroMode ? "🕊" : "☀"}</span>
+              <span className="font-pixelify text-sm">
+                {isMicroMode
+                  ? "MICRO MODE — 가벼운 일만 보여줄게요"
+                  : "REGULAR MODE — 모든 일정 표시중"}
+              </span>
+            </div>
+
+            {blocks.map((b) => {
+              const visible = getVisible(b.key);
+              const hidden = getHidden(b.key);
+              return (
+                <div key={b.key} className="pixel-card p-3">
+                  <div className="flex items-center justify-between mb-2 pb-2 border-b-2 border-dashed border-olive-dark/30">
+                    <h3 className="font-press text-xs text-olive-dark flex items-center gap-2">
+                      <span className="text-base">{b.icon}</span>
+                      {b.title}
+                    </h3>
+                    <span className="font-press text-[8px] text-olive-dark/60">
+                      ▸{b.subtitle}
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {visible.length === 0 && (
+                      <div className="text-center py-3 font-pixelify text-sm text-olive-dark/70">
+                        ✦ 모두 비웠어요. 푹 쉬어요 ✦
+                      </div>
+                    )}
+                    {visible.map((task) => (
+                      <div
+                        key={task.id}
+                        className={`pixel-task transition-all duration-500 ${
+                          task.status === "leaving"
+                            ? "opacity-0 -translate-x-3 scale-95"
+                            : "opacity-100"
+                        }`}
+                      >
+                        <span className="text-xl flex-shrink-0">
+                          {task.emoji}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-pixelify text-base text-olive-darker">
+                            {task.text}
+                          </div>
+                          {task.isMicro && (
+                            <div className="font-press text-[7px] text-rose">
+                              ✿ MICRO
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex gap-1 flex-shrink-0">
+                          <button
+                            onClick={() => handleSkip(task.id)}
+                            className="pixel-btn-sm pixel-btn-cream"
+                          >
+                            <span className="font-press text-[8px]">SKIP</span>
+                          </button>
+                          <button
+                            onClick={() => handleDone(task.id)}
+                            className="pixel-btn-sm pixel-btn-rose"
+                          >
+                            <span className="font-press text-[8px]">DONE</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {hidden.length > 0 && (
+                    <div className="mt-3 pt-2 border-t-2 border-dashed border-olive-dark/30">
+                      <div className="font-pixelify text-xs text-olive-dark/70 italic flex items-center gap-1">
+                        🕊 {hidden.length}개의 무거운 일정은 살짝 가려뒀어요
+                      </div>
+                      <div className="mt-1 space-y-1 opacity-30">
+                        {hidden.map((t) => (
+                          <div
+                            key={t.id}
+                            className="font-pixelify text-sm text-olive-darker line-through"
+                          >
+                            {t.emoji} {t.text}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        );
       }
+
+      // ════════════════════════════════════════════════════════════
+      //   VIEW: GARDEN
+      // ════════════════════════════════════════════════════════════
+      function GardenView({ waterCount, hydrangea, setWaterCount, showToast }) {
+        const grow = () => {
+          setWaterCount((c) => c + 1);
+          showToast("💧 한 방울 더 주었어요");
+        };
+        const log = [
+          { mood: "✿", text: "DONE 버튼으로 +1 물주기" },
+          { mood: "♥", text: `현재 단계 — ${hydrangea.label}` },
+          { mood: "☼", text: "10번 물주면 활짝 피어요" },
+          { mood: "✦", text: "조급해하지 않아도 괜찮아요" },
+        ];
+        return (
+          <div className="space-y-3">
+            <div className="pixel-card p-4 text-center">
+              <div className="font-press text-[10px] text-olive-dark mb-3">
+                ▸ MY HYDRANGEA
+              </div>
+              <div className="flex justify-center mb-3 anim-soft-bob">
+                <PixelHydrangeaArt size={120} />
+              </div>
+              <div className="font-press text-sm text-rose">
+                {hydrangea.label.toUpperCase()}
+              </div>
+              <div className="flex justify-center items-center gap-3 mt-3 flex-wrap">
+                <div className="pixel-inset px-3 py-1.5">
+                  <span className="font-press text-[9px] text-olive-dark">
+                    💧 {waterCount} DROPS
+                  </span>
+                </div>
+                <button
+                  onClick={grow}
+                  className="pixel-btn pixel-btn-rose px-3 py-1.5"
+                >
+                  <span className="font-press text-[9px]">+ WATER</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ GROWTH NOTES
+              </div>
+              <div className="space-y-1.5">
+                {log.map((l, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 font-pixelify text-sm text-olive-darker"
+                  >
+                    <span className="text-rose">{l.mood}</span>
+                    <span>{l.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ TIP OF THE DAY
+              </div>
+              <div className="font-pixelify text-sm text-olive-darker leading-snug">
+                🌿 수국은 천천히 자라요. 오늘 못 자라도 괜찮아요 — 내일도 햇빛은
+                충분하니까요.
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ════════════════════════════════════════════════════════════
+      //   VIEW: DIARY
+      // ════════════════════════════════════════════════════════════
+      function DiaryView({ mood, setMood, text, setText, entries, save }) {
+        const moods = [
+          { e: "🌤", l: "PEACE" },
+          { e: "🌸", l: "HAPPY" },
+          { e: "😴", l: "TIRED" },
+          { e: "🌧", l: "BLUE" },
+          { e: "🌪", l: "ANXY" },
+          { e: "🍂", l: "MEH" },
+        ];
+        return (
+          <div className="space-y-3">
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ TODAY I FEEL ...
+              </div>
+              <div className="grid grid-cols-6 gap-1.5">
+                {moods.map((m) => (
+                  <button
+                    key={m.e}
+                    onClick={() => setMood(m.e)}
+                    className={`pixel-btn flex flex-col items-center gap-0.5 py-2 transition-all duration-300 ${
+                      mood === m.e
+                        ? "pixel-btn-rose translate-y-[1px]"
+                        : "pixel-btn-cream"
+                    }`}
+                  >
+                    <span className="text-lg">{m.e}</span>
+                    <span className="font-press text-[7px]">{m.l}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ ONE LINE A DAY
+              </div>
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="아주 짧아도 괜찮아요. 쉼표 하나여도 좋아요."
+                className="pixel-textarea w-full h-20 p-2 font-pixelify text-sm text-olive-darker resize-none"
+              />
+              <div className="flex justify-between items-center mt-2">
+                <div className="font-press text-[8px] text-olive-dark/70">
+                  {mood ? `MOOD ${mood}` : "PICK A MOOD"} · {text.length} CHARS
+                </div>
+                <button
+                  onClick={save}
+                  disabled={!mood || !text.trim()}
+                  className={`pixel-btn px-3 py-1.5 transition-all ${
+                    !mood || !text.trim()
+                      ? "opacity-40 cursor-not-allowed pixel-btn-cream"
+                      : "pixel-btn-rose"
+                  }`}
+                >
+                  <span className="font-press text-[9px]">SAVE ♥</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ RECENT THOUGHTS
+              </div>
+              <div className="space-y-2">
+                {entries.length === 0 && (
+                  <div className="font-pixelify text-sm text-olive-dark/70 text-center py-3">
+                    ✦ 아직 적은 기록이 없어요 ✦
+                  </div>
+                )}
+                {entries.map((entry) => (
+                  <div key={entry.id} className="pixel-inset p-2 anim-fade-in">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-base">{entry.mood}</span>
+                      <span className="font-press text-[8px] text-olive-dark/70">
+                        {entry.date}
+                      </span>
+                    </div>
+                    <div className="font-pixelify text-sm text-olive-darker leading-snug">
+                      {entry.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ════════════════════════════════════════════════════════════
+      //   VIEW: SOUNDS
+      // ════════════════════════════════════════════════════════════
+      function SoundsView({
+        playingTrack,
+        setPlayingTrack,
+        breathing,
+        setBreathing,
+        showToast,
+      }) {
+        const tracks = [
+          {
+            id: "rain",
+            emoji: "🌧",
+            name: "GENTLE RAIN",
+            desc: "토독토독 — 창가의 비",
+          },
+          {
+            id: "stream",
+            emoji: "💧",
+            name: "FOREST STREAM",
+            desc: "졸졸 — 숲속 시냇물",
+          },
+          {
+            id: "wind",
+            emoji: "🍃",
+            name: "SOFT WIND",
+            desc: "솨아 — 나뭇잎 사이 바람",
+          },
+          {
+            id: "fire",
+            emoji: "🔥",
+            name: "FIREPLACE",
+            desc: "타닥타닥 — 작은 모닥불",
+          },
+          {
+            id: "lofi",
+            emoji: "🎹",
+            name: "LO-FI ROOM",
+            desc: "지지직 — 카세트 비트",
+          },
+        ];
+
+        const toggle = (id) => {
+          if (playingTrack === id) {
+            setPlayingTrack(null);
+            showToast("⏸ 사운드를 멈췄어요");
+          } else {
+            setPlayingTrack(id);
+            showToast(`▶ ${tracks.find((t) => t.id === id)?.name}`);
+          }
+        };
+
+        return (
+          <div className="space-y-3">
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ NOW PLAYING
+              </div>
+              <div className="pixel-inset h-24 relative overflow-hidden flex items-end justify-center gap-1 p-2">
+                <div className="absolute inset-0 bg-teal-pad opacity-30" />
+                {playingTrack ? (
+                  <>
+                    {[...Array(12)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="bg-rose w-2 anim-vis relative z-10"
+                        style={{
+                          height: `${30 + Math.random() * 50}%`,
+                          animationDelay: `${i * 0.08}s`,
+                          animationDuration: `${0.5 + Math.random() * 0.5}s`,
+                        }}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center font-press text-[10px] text-olive-dark/70">
+                    ◾ NO TRACK SELECTED ◾
+                  </div>
+                )}
+              </div>
+              {playingTrack && (
+                <div className="mt-2 font-pixelify text-sm text-olive-darker text-center">
+                  {tracks.find((t) => t.id === playingTrack)?.emoji}{" "}
+                  {tracks.find((t) => t.id === playingTrack)?.name}
+                </div>
+              )}
+            </div>
+
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ AMBIENT TRACKS
+              </div>
+              <div className="space-y-1.5">
+                {tracks.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => toggle(t.id)}
+                    className={`w-full pixel-btn flex items-center gap-3 px-3 py-2 transition-all duration-300 ${
+                      playingTrack === t.id
+                        ? "pixel-btn-rose"
+                        : "pixel-btn-cream"
+                    }`}
+                  >
+                    <span className="text-2xl">{t.emoji}</span>
+                    <div className="flex-1 text-left">
+                      <div className="font-press text-[9px]">{t.name}</div>
+                      <div className="font-pixelify text-xs">{t.desc}</div>
+                    </div>
+                    <span className="font-press text-[10px]">
+                      {playingTrack === t.id ? "■" : "▶"}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ BREATHE WITH ME
+              </div>
+              <div className="flex flex-col items-center gap-3 py-2">
+                <div
+                  className={`pixel-breath-circle ${breathing ? "anim-breath" : ""}`}
+                >
+                  <span className="font-press text-[10px] text-olive-darker text-center leading-tight whitespace-pre-line">
+                    {breathing ? "IN ··· OUT" : "TAP TO\nSTART"}
+                  </span>
+                </div>
+                <button
+                  onClick={() => setBreathing(!breathing)}
+                  className={`pixel-btn px-4 py-2 ${breathing ? "pixel-btn-rose" : "pixel-btn-cream"}`}
+                >
+                  <span className="font-press text-[9px]">
+                    {breathing ? "◾ STOP" : "▶ BEGIN"}
+                  </span>
+                </button>
+                <div className="font-pixelify text-xs text-olive-dark/80 text-center max-w-xs">
+                  동그라미와 함께 호흡해 보세요 — 들이쉴 때 커지고, 내쉴 때
+                  작아져요.
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ════════════════════════════════════════════════════════════
+      //   VIEW: BIN (Worry Release)
+      // ════════════════════════════════════════════════════════════
+      function BinView({
+        worryInput,
+        setWorryInput,
+        releasedCount,
+        releaseWorry,
+      }) {
+        const affirmations = [
+          "걱정의 90%는 일어나지 않아요 ✦",
+          "오늘의 무거움은 오늘만의 것이에요 🕊",
+          "잠시 내려놓아도 사라지지 않아요 ☁",
+          "걱정한다고 해결되지 않으니, 일단 보내요 ♥",
+        ];
+        const todayQuote = affirmations[releasedCount % affirmations.length];
+
+        return (
+          <div className="space-y-3">
+            <div className="pixel-card p-4 text-center">
+              <div className="font-press text-[10px] text-olive-dark mb-3">
+                ▸ RELEASE YOUR WORRIES
+              </div>
+              <div className="text-5xl mb-2 anim-soft-bob inline-block">☁️</div>
+              <div className="font-press text-base text-rose mb-1">
+                {releasedCount}
+              </div>
+              <div className="font-press text-[9px] text-olive-dark/80">
+                WORRIES RELEASED TO SKY
+              </div>
+            </div>
+
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ WHAT'S WEIGHING YOU DOWN?
+              </div>
+              <textarea
+                value={worryInput}
+                onChange={(e) => setWorryInput(e.target.value)}
+                placeholder="머릿속을 떠도는 걱정 한 가지를 적어보세요..."
+                className="pixel-textarea w-full h-20 p-2 font-pixelify text-sm text-olive-darker resize-none"
+              />
+              <button
+                onClick={releaseWorry}
+                disabled={!worryInput.trim()}
+                className={`mt-2 w-full pixel-btn py-2 transition-all ${
+                  !worryInput.trim()
+                    ? "opacity-40 cursor-not-allowed pixel-btn-cream"
+                    : "pixel-btn-rose"
+                }`}
+              >
+                <span className="font-press text-[10px]">
+                  ☁ RELEASE TO THE SKY ☁
+                </span>
+              </button>
+            </div>
+
+            <div className="pixel-card p-3">
+              <div className="font-press text-[10px] text-olive-dark mb-2">
+                ▸ TODAY'S WHISPER
+              </div>
+              <div className="font-pixelify text-sm text-olive-darker text-center py-2 leading-relaxed">
+                {todayQuote}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ════════════════════════════════════════════════════════════
+      //   MAIN APP
+      // ════════════════════════════════════════════════════════════
+      function App() {
+        const [activeView, setActiveView] = useState("tasks");
+        const [now, setNow] = useState(new Date());
+        const [toast, setToast] = useState(null);
+
+        const [energy, setEnergy] = useState(7);
+        const [waterCount, setWaterCount] = useState(3);
+        const [tasks, setTasks] = useState([
+          {
+            id: 1,
+            block: "morning",
+            emoji: "📖",
+            text: "단어 15개 훑기",
+            isMicro: true,
+            status: "active",
+          },
+          {
+            id: 2,
+            block: "morning",
+            emoji: "🌿",
+            text: "수국 잎 닦아주기",
+            isMicro: true,
+            status: "active",
+          },
+          {
+            id: 3,
+            block: "morning",
+            emoji: "🏢",
+            text: "분기 보고서 마감",
+            isMicro: false,
+            status: "active",
+          },
+          {
+            id: 4,
+            block: "afternoon",
+            emoji: "🍵",
+            text: "캐모마일 한 잔",
+            isMicro: true,
+            status: "active",
+          },
+          {
+            id: 5,
+            block: "afternoon",
+            emoji: "🌤️",
+            text: "5분 환기하기",
+            isMicro: true,
+            status: "active",
+          },
+          {
+            id: 6,
+            block: "afternoon",
+            emoji: "💪",
+            text: "헬스장 1시간",
+            isMicro: false,
+            status: "active",
+          },
+          {
+            id: 7,
+            block: "evening",
+            emoji: "✍️",
+            text: "한 줄 일기 끄적이기",
+            isMicro: true,
+            status: "active",
+          },
+          {
+            id: 8,
+            block: "evening",
+            emoji: "🧘",
+            text: "3분 호흡 명상",
+            isMicro: true,
+            status: "active",
+          },
+          {
+            id: 9,
+            block: "evening",
+            emoji: "💻",
+            text: "사이드 프로젝트 1시간",
+            isMicro: false,
+            status: "active",
+          },
+        ]);
+
+        const [diaryMood, setDiaryMood] = useState(null);
+        const [diaryText, setDiaryText] = useState("");
+        const [diaryEntries, setDiaryEntries] = useState([
+          {
+            id: 1,
+            mood: "🌤",
+            text: "구름 보면서 산책했음. 바람이 좋았다.",
+            date: "2일 전",
+          },
+          {
+            id: 2,
+            mood: "😴",
+            text: "오늘은 그냥 누워있었다. 그래도 괜찮아.",
+            date: "3일 전",
+          },
+          {
+            id: 3,
+            mood: "🌸",
+            text: "수국에 처음 꽃이 피었다. 작지만 핑크.",
+            date: "5일 전",
+          },
+        ]);
+
+        const [worryInput, setWorryInput] = useState("");
+        const [releasedCount, setReleasedCount] = useState(7);
+        const [floatingWorries, setFloatingWorries] = useState([]);
+
+        const [playingTrack, setPlayingTrack] = useState(null);
+        const [breathing, setBreathing] = useState(false);
+
+        useEffect(() => {
+          const t = setInterval(() => setNow(new Date()), 1000);
+          return () => clearInterval(t);
+        }, []);
+
+        const isMicroMode = energy <= 3;
+        const hydrangea =
+          waterCount < 3
+            ? { emoji: "🌱", label: "씨앗" }
+            : waterCount < 6
+              ? { emoji: "🌿", label: "잎사귀" }
+              : { emoji: "🌸", label: "활짝 핀 수국" };
+        const time = now.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+
+        const showToast = (msg) => {
+          setToast(msg);
+          setTimeout(() => setToast(null), 2000);
+        };
+
+        const handleSkip = (id) => {
+          setTasks((p) =>
+            p.map((t) => (t.id === id ? { ...t, status: "leaving" } : t)),
+          );
+          showToast("☁ 괜찮아, 내일 하면 돼!");
+          setTimeout(() => setTasks((p) => p.filter((t) => t.id !== id)), 450);
+        };
+        const handleDone = (id) => {
+          setTasks((p) =>
+            p.map((t) => (t.id === id ? { ...t, status: "leaving" } : t)),
+          );
+          setWaterCount((c) => c + 1);
+          showToast("✦ 잘했어요!");
+          setTimeout(() => setTasks((p) => p.filter((t) => t.id !== id)), 450);
+        };
+        const saveDiary = () => {
+          if (!diaryText.trim() || !diaryMood) return;
+          const entry = {
+            id: Date.now(),
+            mood: diaryMood,
+            text: diaryText,
+            date: "방금 전",
+          };
+          setDiaryEntries((p) => [entry, ...p]);
+          setDiaryText("");
+          setDiaryMood(null);
+          showToast("♥ 마음을 적었어요");
+        };
+        const releaseWorry = () => {
+          if (!worryInput.trim()) return;
+          const id = Date.now();
+          const text = worryInput;
+          setFloatingWorries((p) => [
+            ...p,
+            { id, text, x: 30 + Math.random() * 40 },
+          ]);
+          setWorryInput("");
+          setReleasedCount((c) => c + 1);
+          showToast("☁ 하늘로 보냈어요");
+          setTimeout(
+            () => setFloatingWorries((p) => p.filter((f) => f.id !== id)),
+            4000,
+          );
+        };
+
+        const sidebar = [
+          { id: "tasks", label: "TASKS", Icon: PixelTasksIcon },
+          { id: "garden", label: "GARDEN", Icon: PixelGardenIcon },
+          { id: "diary", label: "DIARY", Icon: PixelDiaryIcon },
+          { id: "sounds", label: "SOUNDS", Icon: PixelSoundsIcon },
+          { id: "bin", label: "WORRIES", Icon: PixelBinIcon },
+        ];
+        const titleByView = {
+          tasks: "TODAY'S CLOUDS",
+          garden: "HYDRANGEA GARDEN",
+          diary: "CLOUD DIARY",
+          sounds: "QUIET SOUNDS",
+          bin: "WORRY RELEASE",
+        };
+
+        return (
+          <>
+            <style>{`
+            @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;700&display=swap');
+
+            :root {
+              --teal: #7aa098;
+              --teal-pad: #5e8580;
+              --teal-deep: #4a6a64;
+              --cream: #d6cfa3;
+              --cream-light: #ebe4b8;
+              --cream-dark: #a8a070;
+              --olive: #6e8459;
+              --olive-light: #a4c089;
+              --olive-dark: #4a5e3c;
+              --olive-darker: #2c3a26;
+              --ink: #1a261c;
+              --rose: #b87798;
+              --rose-light: #e2a8c0;
+              --rose-deep: #8a4a6a;
+            }
+
+            .font-press   { font-family: 'Press Start 2P', monospace; line-height: 1.5; }
+            .font-pixelify{ font-family: 'Pixelify Sans', monospace; font-weight: 500; }
+
+            .text-olive       { color: var(--olive); }
+            .text-olive-dark  { color: var(--olive-dark); }
+            .text-olive-darker{ color: var(--olive-darker); }
+            .text-rose        { color: var(--rose); }
+            .text-rose-deep   { color: var(--rose-deep); }
+            .text-cream-light { color: var(--cream-light); }
+            .bg-teal          { background: var(--teal); }
+            .bg-teal-pad      { background: var(--teal-pad); }
+            .bg-cream         { background: var(--cream); }
+            .bg-olive         { background: var(--olive); }
+            .bg-rose          { background: var(--rose); }
+            .border-olive-dark{ border-color: var(--olive-dark); }
+
+            * { image-rendering: pixelated; }
+
+            .cloud-os {
+              background:
+                radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.08), transparent 50%),
+                linear-gradient(180deg, #82a8a0 0%, #7aa098 50%, #6e948c 100%);
+            }
+
+            .pixel-window {
+              background: var(--cream);
+              border: 2px solid var(--ink);
+              box-shadow:
+                inset 1px 1px 0 var(--cream-light),
+                inset -1px -1px 0 var(--cream-dark),
+                inset 2px 2px 0 var(--cream),
+                inset -2px -2px 0 var(--cream-dark),
+                3px 3px 0 rgba(20,30,25,0.35);
+            }
+            .title-bar {
+              background: linear-gradient(180deg, var(--olive) 0%, var(--olive-dark) 100%);
+              border-bottom: 2px solid var(--ink);
+              color: var(--olive-light);
+              padding: 4px 6px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            }
+            .win-btn {
+              background: var(--cream);
+              border: 1px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark);
+              width: 18px; height: 16px;
+              font-family: 'Press Start 2P', monospace;
+              font-size: 8px;
+              color: var(--olive-darker);
+              display: inline-flex; align-items: center; justify-content: center;
+              line-height: 1;
+              cursor: pointer;
+            }
+            .win-btn:active {
+              box-shadow: inset -1px -1px 0 var(--cream-light), inset 1px 1px 0 var(--cream-dark);
+            }
+
+            .desktop-icon {
+              display: flex; flex-direction: column; align-items: center; gap: 4px;
+              padding: 6px 4px;
+              background: transparent;
+              border: 1px dashed transparent;
+              transition: all 0.2s;
+              cursor: pointer;
+              width: 64px;
+            }
+            .desktop-icon:hover { background: rgba(235,228,184,0.12); }
+            .desktop-icon.active {
+              background: rgba(235,228,184,0.22);
+              border: 1px dashed var(--cream-light);
+            }
+            .desktop-icon .icon-label {
+              font-family: 'Press Start 2P', monospace;
+              font-size: 7px;
+              color: var(--cream-light);
+              text-shadow: 1px 1px 0 var(--ink);
+              letter-spacing: 0.05em;
+            }
+            .desktop-icon.active .icon-label { color: #fff; }
+
+            .pixel-card {
+              background: var(--cream-light);
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 #f5e8c8, inset -1px -1px 0 var(--cream-dark);
+            }
+            .pixel-inset {
+              background: var(--cream);
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--cream-dark), inset -1px -1px 0 var(--cream-light);
+            }
+
+            .pixel-btn, .pixel-btn-sm {
+              border: 2px solid var(--ink);
+              font-family: 'Press Start 2P', monospace;
+              color: var(--olive-darker);
+              cursor: pointer;
+              transition: transform 0.06s;
+              display: inline-flex; align-items: center; justify-content: center;
+            }
+            .pixel-btn-cream {
+              background: var(--cream);
+              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark), 2px 2px 0 var(--ink);
+              color: var(--olive-darker);
+            }
+            .pixel-btn-cream:hover { background: var(--cream-light); }
+            .pixel-btn-cream:active {
+              box-shadow: inset -1px -1px 0 var(--cream-light), inset 1px 1px 0 var(--cream-dark);
+              transform: translate(2px, 2px);
+            }
+            .pixel-btn-rose {
+              background: var(--rose);
+              color: #fff;
+              box-shadow: inset 1px 1px 0 var(--rose-light), inset -1px -1px 0 var(--rose-deep), 2px 2px 0 var(--ink);
+            }
+            .pixel-btn-rose:hover { background: var(--rose-light); color: var(--rose-deep); }
+            .pixel-btn-rose:active {
+              box-shadow: inset -1px -1px 0 var(--rose-light), inset 1px 1px 0 var(--rose-deep);
+              transform: translate(2px, 2px);
+            }
+            .pixel-btn-sm { padding: 4px 6px; }
+
+            .pixel-chip {
+              display: flex; align-items: center; gap: 6px;
+              padding: 6px 10px;
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark);
+            }
+            .pixel-chip-rose { background: #f5d8e2; color: var(--rose-deep); }
+            .pixel-chip-sky  { background: #c8e0d8; color: var(--olive-dark); }
+
+            .pixel-task {
+              background: var(--cream);
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark);
+              padding: 8px 10px;
+              display: flex; align-items: center; gap: 10px;
+            }
+
+            .pixel-slider {
+              -webkit-appearance: none; appearance: none;
+              height: 14px; background: transparent; cursor: pointer;
+            }
+            .pixel-slider::-webkit-slider-runnable-track {
+              height: 12px;
+              background: var(--cream);
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--cream-dark);
+            }
+            .pixel-slider::-moz-range-track {
+              height: 12px;
+              background: var(--cream);
+              border: 2px solid var(--ink);
+            }
+            .pixel-slider::-webkit-slider-thumb {
+              -webkit-appearance: none; appearance: none;
+              width: 14px; height: 18px;
+              background: var(--rose);
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--rose-light), inset -1px -1px 0 var(--rose-deep);
+              margin-top: -5px;
+              cursor: pointer;
+            }
+            .pixel-slider::-moz-range-thumb {
+              width: 14px; height: 18px;
+              background: var(--rose);
+              border: 2px solid var(--ink);
+              cursor: pointer;
+            }
+
+            .pixel-textarea {
+              background: var(--cream);
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--cream-dark);
+              outline: none;
+            }
+            .pixel-textarea:focus { border-color: var(--rose); }
+            .pixel-textarea::placeholder { color: rgba(44, 58, 38, 0.45); }
+
+            .pixel-breath-circle {
+              width: 110px; height: 110px;
+              background: var(--rose-light);
+              border: 3px solid var(--ink);
+              box-shadow: inset 2px 2px 0 #fff, inset -2px -2px 0 var(--rose-deep), 4px 4px 0 var(--ink);
+              display: flex; align-items: center; justify-content: center;
+              color: var(--olive-darker);
+              transition: transform 1s ease-in-out, background 1s;
+            }
+
+            .taskbar {
+              background: var(--cream);
+              border-top: 2px solid var(--ink);
+              box-shadow: inset 0 1px 0 var(--cream-light), inset 0 -1px 0 var(--cream-dark);
+              display: flex; align-items: center;
+              padding: 3px 6px;
+              gap: 6px;
+            }
+            .start-btn {
+              background: var(--cream);
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark);
+              padding: 3px 8px;
+              display: flex; align-items: center; gap: 6px;
+              font-family: 'Press Start 2P', monospace;
+              font-size: 9px;
+              color: var(--olive-darker);
+              cursor: pointer;
+            }
+            .start-btn:active { box-shadow: inset -1px -1px 0 var(--cream-light), inset 1px 1px 0 var(--cream-dark); }
+            .taskbar-app {
+              flex: 1;
+              background: var(--olive);
+              border: 2px solid var(--ink);
+              box-shadow: inset -1px -1px 0 var(--olive-light), inset 1px 1px 0 var(--olive-dark);
+              padding: 3px 8px;
+              font-family: 'Press Start 2P', monospace;
+              font-size: 9px;
+              color: var(--olive-light);
+              display: flex; align-items: center; gap: 6px;
+              min-width: 0;
+            }
+            .taskbar-app > span:nth-child(2) {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+            .clock {
+              background: var(--cream);
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--cream-dark);
+              padding: 3px 10px;
+              font-family: 'Press Start 2P', monospace;
+              font-size: 9px;
+              color: var(--olive-darker);
+              flex-shrink: 0;
+            }
+
+            .lily-pad {
+              position: absolute;
+              background: var(--teal-pad);
+              border-radius: 50%;
+              opacity: 0.45;
+            }
+
+            @keyframes soft-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+            @keyframes vis      { 0%,100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+            @keyframes breath   {
+              0%,100% { transform: scale(1); background: var(--rose-light); }
+              50% { transform: scale(1.4); background: #f5d8e2; }
+            }
+            @keyframes float-up {
+              0%   { opacity: 0; transform: translateY(0) scale(0.6); }
+              15%  { opacity: 1; transform: translateY(-30px) scale(1); }
+              85%  { opacity: 1; transform: translateY(-220px) scale(1.2); }
+              100% { opacity: 0; transform: translateY(-300px) scale(1.4); }
+            }
+            @keyframes fade-in  { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+            @keyframes view-in  { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
+            @keyframes toast-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+            @keyframes pad-bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+
+            .anim-soft-bob { animation: soft-bob 3s ease-in-out infinite; }
+            .anim-vis      { animation: vis 0.6s ease-in-out infinite; transform-origin: bottom; }
+            .anim-breath   { animation: breath 8s ease-in-out infinite; }
+            .anim-float-up { animation: float-up 4s ease-out forwards; }
+            .anim-fade-in  { animation: fade-in 0.4s ease-out both; }
+            .anim-view-in  { animation: view-in 0.4s ease-out both; }
+            .anim-toast    { animation: toast-in 0.3s ease-out both; }
+            .anim-pad      { animation: pad-bob 6s ease-in-out infinite; }
+
+            .window-content::-webkit-scrollbar { width: 14px; }
+            .window-content::-webkit-scrollbar-track {
+              background: var(--cream-light);
+              border-left: 2px solid var(--ink);
+            }
+            .window-content::-webkit-scrollbar-thumb {
+              background: var(--olive);
+              border: 2px solid var(--ink);
+              box-shadow: inset 1px 1px 0 var(--olive-light), inset -1px -1px 0 var(--olive-dark);
+            }
+          `}</style>
+
+            <div className="cloud-os min-h-screen w-full flex flex-col font-pixelify relative overflow-hidden">
+              {/* DECORATIVE LILY PADS */}
+              <div
+                className="lily-pad anim-pad"
+                style={{ width: 180, height: 80, left: "8%", bottom: "20%" }}
+              />
+              <div
+                className="lily-pad anim-pad"
+                style={{
+                  width: 240,
+                  height: 100,
+                  right: "5%",
+                  bottom: "12%",
+                  animationDelay: "1.5s",
+                }}
+              />
+              <div
+                className="lily-pad anim-pad"
+                style={{
+                  width: 140,
+                  height: 60,
+                  left: "40%",
+                  top: "22%",
+                  animationDelay: "3s",
+                  opacity: 0.3,
+                }}
+              />
+              <div
+                className="lily-pad anim-pad"
+                style={{
+                  width: 90,
+                  height: 40,
+                  right: "30%",
+                  top: "8%",
+                  animationDelay: "2s",
+                  opacity: 0.35,
+                }}
+              />
+
+              <div className="absolute top-6 left-1/2 font-press text-[10px] text-cream-light opacity-50 select-none">
+                ▪ ▫ ▪
+              </div>
+              <div className="absolute bottom-20 right-10 font-press text-[10px] text-cream-light opacity-50 select-none">
+                ▫ ▪ ▫ ▫
+              </div>
+
+              {/* FLOATING RELEASED WORRIES */}
+              {floatingWorries.map((w) => (
+                <div
+                  key={w.id}
+                  className="absolute z-40 pointer-events-none anim-float-up flex flex-col items-center"
+                  style={{ left: `${w.x}%`, bottom: "30%" }}
+                >
+                  <PixelCloudIcon size={48} color="#ebe4b8" />
+                  <div className="pixel-inset px-2 py-1 mt-1 max-w-[160px] font-pixelify text-xs text-olive-darker">
+                    {w.text}
+                  </div>
+                </div>
+              ))}
+
+              <div className="flex-1 flex p-3 sm:p-4 gap-3 sm:gap-4 overflow-hidden relative z-10">
+                {/* SIDEBAR */}
+                <aside className="flex flex-col gap-2 sm:gap-3 flex-shrink-0">
+                  {sidebar.map((item) => {
+                    const Icon = item.Icon;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveView(item.id)}
+                        className={`desktop-icon ${activeView === item.id ? "active" : ""}`}
+                      >
+                        <Icon size={36} />
+                        <div className="icon-label">{item.label}</div>
+                      </button>
+                    );
+                  })}
+                </aside>
+
+                {/* MAIN PIXEL WINDOW */}
+                <main className="pixel-window flex-1 flex flex-col min-w-0">
+                  <div className="title-bar">
+                    <span className="font-press text-[10px] sm:text-xs flex items-center gap-2 truncate">
+                      <span>☁</span>
+                      <span className="truncate">
+                        {titleByView[activeView]}
+                      </span>
+                    </span>
+                    <div className="flex gap-1 flex-shrink-0">
+                      <button className="win-btn">_</button>
+                      <button className="win-btn">▢</button>
+                      <button className="win-btn">×</button>
+                    </div>
+                  </div>
+                  <div className="window-content flex-1 overflow-y-auto p-3 sm:p-4">
+                    <div key={activeView} className="anim-view-in">
+                      {activeView === "tasks" && (
+                        <TasksView
+                          energy={energy}
+                          setEnergy={setEnergy}
+                          tasks={tasks}
+                          handleSkip={handleSkip}
+                          handleDone={handleDone}
+                          hydrangea={hydrangea}
+                          waterCount={waterCount}
+                          isMicroMode={isMicroMode}
+                        />
+                      )}
+                      {activeView === "garden" && (
+                        <GardenView
+                          waterCount={waterCount}
+                          hydrangea={hydrangea}
+                          setWaterCount={setWaterCount}
+                          showToast={showToast}
+                        />
+                      )}
+                      {activeView === "diary" && (
+                        <DiaryView
+                          mood={diaryMood}
+                          setMood={setDiaryMood}
+                          text={diaryText}
+                          setText={setDiaryText}
+                          entries={diaryEntries}
+                          save={saveDiary}
+                        />
+                      )}
+                      {activeView === "sounds" && (
+                        <SoundsView
+                          playingTrack={playingTrack}
+                          setPlayingTrack={setPlayingTrack}
+                          breathing={breathing}
+                          setBreathing={setBreathing}
+                          showToast={showToast}
+                        />
+                      )}
+                      {activeView === "bin" && (
+                        <BinView
+                          worryInput={worryInput}
+                          setWorryInput={setWorryInput}
+                          releasedCount={releasedCount}
+                          releaseWorry={releaseWorry}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </main>
+              </div>
+
+              {/* TASKBAR */}
+              <footer className="taskbar relative z-10">
+                <button className="start-btn">
+                  <PixelStartIcon size={14} />
+                  <span>START</span>
+                </button>
+                <div className="taskbar-app">
+                  <span>☁</span>
+                  <span>{titleByView[activeView]}</span>
+                </div>
+                <div className="clock">{time}</div>
+              </footer>
+
+              {/* TOAST */}
+              {toast && (
+                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+                  <div className="pixel-card px-4 py-2 anim-toast">
+                    <span className="font-pixelify text-base text-olive-darker">
+                      {toast}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
     </script>
   </body>
 </html>
