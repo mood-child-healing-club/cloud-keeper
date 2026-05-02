@@ -6,8 +6,8 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <title>CLOUD KEEPER ☁</title>
-    <meta name="theme-color" content="#6e8459" />
+    <title>ANGELA 2026 STRAWBERRY DIARY 🍓</title>
+    <meta name="theme-color" content="#ff85a2" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script
@@ -19,1416 +19,2219 @@
       src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
     ></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- 귀여운 픽셀 폰트 -->
+    <link
+      href="https://cdn.jsdelivr.net/gh/DungGeunMo/dunggeunmo-web-font@1.0.0/DungGeunMo.css"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              berry: {
+                bg: "#ffe6ea",
+                grid: "#ffc2d1",
+                light: "#ffb3c6",
+                DEFAULT: "#ff85a2",
+                dark: "#ff4d6d",
+                choco: "#5a3a41",
+                cream: "#fffdf5",
+                matcha: "#b5d5c5",
+              },
+            },
+            fontFamily: {
+              pixel: ['"DungGeunMo"', "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        font-family: "DungGeunMo", sans-serif;
+        background-color: #ffe6ea;
+        background-image:
+          linear-gradient(#ffc2d1 2px, transparent 2px),
+          linear-gradient(90deg, #ffc2d1 2px, transparent 2px);
+        background-size: 24px 24px;
+        color: #5a3a41;
+        margin: 0;
+        overflow-x: hidden;
+      }
+
+      .berry-card {
+        background-color: #fffdf5;
+        border: 3px dashed #ff85a2;
+        border-radius: 24px;
+        box-shadow: 6px 6px 0px #ffb3c6;
+        transition: transform 0.2s ease;
+      }
+
+      .berry-btn {
+        background-color: #fffdf5;
+        border: 3px solid #ff85a2;
+        border-radius: 16px;
+        color: #5a3a41;
+        box-shadow: 4px 4px 0px #ffb3c6;
+        cursor: pointer;
+        transition: all 0.1s;
+      }
+      .berry-btn:active {
+        transform: translate(4px, 4px);
+        box-shadow: 0px 0px 0px #ffb3c6;
+      }
+      .berry-btn-active {
+        background-color: #ff85a2;
+        color: #ffffff;
+        box-shadow: inset 3px 3px 0px rgba(0, 0, 0, 0.1);
+        transform: translate(2px, 2px);
+      }
+
+      .progress-bar-container {
+        width: 100%;
+        height: 24px;
+        background-color: #fffdf5;
+        border: 3px solid #5a3a41;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.1);
+      }
+      .progress-bar-fill {
+        height: 100%;
+        background-color: #ff4d6d;
+        background-image: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 10px,
+          rgba(255, 255, 255, 0.2) 10px,
+          rgba(255, 255, 255, 0.2) 20px
+        );
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .blind-text {
+        background-color: #ff85a2;
+        color: transparent;
+        border-radius: 8px;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .blind-text:hover,
+      .blind-text:active {
+        background-color: transparent;
+        color: inherit;
+      }
+
+      .toggle-checkbox:checked {
+        right: 0;
+        border-color: #ff4d6d;
+      }
+      .toggle-checkbox:checked + .toggle-label {
+        background-color: #ff4d6d;
+      }
+
+      ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #ffe6ea;
+        border-left: 2px dashed #ffb3c6;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #ff85a2;
+        border-radius: 10px;
+        border: 2px solid #ffe6ea;
+      }
+
+      .anim-toast {
+        animation: floatUpAndFade 2s ease-out forwards;
+      }
+      @keyframes floatUpAndFade {
+        0% {
+          opacity: 0;
+          transform: translateY(20px) scale(0.8);
+        }
+        20% {
+          opacity: 1;
+          transform: translateY(0) scale(1.1);
+        }
+        30% {
+          transform: scale(1);
+        }
+        80% {
+          opacity: 1;
+          transform: translateY(-10px);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+      .animate-berry-bounce {
+        animation: bounce 1s infinite;
+      }
+
+      input[type="checkbox"].hidden-check {
+        display: none;
+      }
+
+      .letter-paper {
+        background-image: repeating-linear-gradient(
+          transparent,
+          transparent 31px,
+          #ffb3c6 31px,
+          #ffb3c6 32px
+        );
+        background-attachment: local;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
 
-    <script type="text/babel">
-      const { useState, useEffect } = React;
+    <!-- 💡 Firebase 연동을 위해 data-type="module" 설정! -->
+    <script type="text/babel" data-type="module">
+      const { useState, useEffect, useMemo } = window.React;
 
-      // ════════════════════════════════════════════════════════════
-      //   PIXEL ICONS  (16x16 viewBox, hand-pixeled rectangles)
-      // ════════════════════════════════════════════════════════════
-      const PixelTasksIcon = ({ size = 32 }) => (
-        <svg
-          viewBox="0 0 16 16"
-          width={size}
-          height={size}
-          shapeRendering="crispEdges"
-          style={{ imageRendering: "pixelated" }}
-        >
-          <rect x="6" y="0" width="4" height="2" fill="#2a3a25" />
-          <rect x="3" y="1" width="10" height="14" fill="#2a3a25" />
-          <rect x="4" y="2" width="8" height="12" fill="#ebe4b8" />
-          <rect x="7" y="0" width="2" height="1" fill="#5a4a35" />
-          <rect x="5" y="4" width="1" height="2" fill="#6e8459" />
-          <rect x="6" y="5" width="1" height="1" fill="#6e8459" />
-          <rect x="7" y="4" width="1" height="1" fill="#6e8459" />
-          <rect x="8" y="3" width="1" height="1" fill="#6e8459" />
-          <rect x="9" y="4" width="2" height="1" fill="#3a4a35" />
-          <rect x="5" y="8" width="6" height="1" fill="#3a4a35" />
-          <rect x="5" y="10" width="6" height="1" fill="#3a4a35" />
-          <rect x="5" y="12" width="4" height="1" fill="#3a4a35" />
-        </svg>
-      );
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      import {
+        getAuth,
+        signInWithCustomToken,
+        signInAnonymously,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        onSnapshot,
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-      const PixelGardenIcon = ({ size = 32 }) => (
-        <svg
-          viewBox="0 0 16 16"
-          width={size}
-          height={size}
-          shapeRendering="crispEdges"
-          style={{ imageRendering: "pixelated" }}
-        >
-          <rect x="6" y="1" width="2" height="2" fill="#b87798" />
-          <rect x="9" y="1" width="2" height="2" fill="#b87798" />
-          <rect x="5" y="2" width="6" height="3" fill="#b87798" />
-          <rect x="6" y="5" width="4" height="1" fill="#b87798" />
-          <rect x="6" y="2" width="2" height="1" fill="#e2a8c0" />
-          <rect x="9" y="2" width="1" height="1" fill="#e2a8c0" />
-          <rect x="7" y="3" width="2" height="1" fill="#f5d878" />
-          <rect x="7" y="6" width="2" height="2" fill="#5a7a4a" />
-          <rect x="3" y="8" width="10" height="2" fill="#2a3a25" />
-          <rect x="4" y="9" width="8" height="1" fill="#a8784a" />
-          <rect x="4" y="10" width="8" height="5" fill="#7a4a32" />
-          <rect x="5" y="11" width="6" height="3" fill="#a8784a" />
-          <rect x="6" y="12" width="2" height="1" fill="#c8966a" />
-        </svg>
-      );
+      // ☁️ Firebase 초기화 세팅
+      let db = null;
+      let auth = null;
+      let appId = "default-app-id";
 
-      const PixelDiaryIcon = ({ size = 32 }) => (
-        <svg
-          viewBox="0 0 16 16"
-          width={size}
-          height={size}
-          shapeRendering="crispEdges"
-          style={{ imageRendering: "pixelated" }}
-        >
-          <rect x="2" y="2" width="12" height="12" fill="#2a3a25" />
-          <rect x="3" y="3" width="10" height="10" fill="#a85a5a" />
-          <rect x="3" y="3" width="2" height="10" fill="#7a3a3a" />
-          <rect x="6" y="5" width="6" height="1" fill="#ebe4b8" />
-          <rect x="6" y="7" width="5" height="1" fill="#ebe4b8" />
-          <rect x="7" y="9" width="1" height="1" fill="#f5b8d8" />
-          <rect x="9" y="9" width="1" height="1" fill="#f5b8d8" />
-          <rect x="6" y="10" width="4" height="1" fill="#f5b8d8" />
-          <rect x="7" y="11" width="2" height="1" fill="#f5b8d8" />
-        </svg>
-      );
+      try {
+        if (typeof __firebase_config !== "undefined") {
+          const firebaseConfig = JSON.parse(__firebase_config);
+          const app = initializeApp(firebaseConfig);
+          auth = getAuth(app);
+          db = getFirestore(app);
+          appId = typeof __app_id !== "undefined" ? __app_id : "default-app-id";
+        }
+      } catch (e) {
+        console.error("Firebase 초기화 에러 (로컬 모드로 전환됩니다):", e);
+      }
 
-      const PixelSoundsIcon = ({ size = 32 }) => (
-        <svg
-          viewBox="0 0 16 16"
-          width={size}
-          height={size}
-          shapeRendering="crispEdges"
-          style={{ imageRendering: "pixelated" }}
-        >
-          <rect x="1" y="3" width="14" height="10" fill="#2a3a25" />
-          <rect x="2" y="4" width="12" height="8" fill="#5e8580" />
-          <rect x="3" y="5" width="10" height="3" fill="#1a2a25" />
-          <rect x="4" y="6" width="2" height="1" fill="#a4c089" />
-          <rect x="10" y="6" width="2" height="1" fill="#a4c089" />
-          <rect x="6" y="6" width="4" height="1" fill="#3a4a4a" />
-          <rect x="3" y="9" width="10" height="3" fill="#ebe4b8" />
-          <rect x="4" y="10" width="2" height="1" fill="#a85a5a" />
-          <rect x="7" y="10" width="2" height="1" fill="#3a4a35" />
-          <rect x="10" y="10" width="2" height="1" fill="#3a4a35" />
-        </svg>
-      );
+      // 💾 커스텀 훅: 클라우드 실시간 동기화 마법사!
+      const useFirestoreSync = (docName, initialData, user) => {
+        const [data, setData] = useState(() => {
+          if (!db) {
+            const saved = localStorage.getItem(`angela_cloud_${docName}`);
+            return saved ? JSON.parse(saved) : initialData;
+          }
+          return initialData;
+        });
 
-      const PixelBinIcon = ({ size = 32 }) => (
-        <svg
-          viewBox="0 0 16 16"
-          width={size}
-          height={size}
-          shapeRendering="crispEdges"
-          style={{ imageRendering: "pixelated" }}
-        >
-          <rect x="6" y="1" width="4" height="1" fill="#2a3a25" />
-          <rect x="2" y="3" width="12" height="1" fill="#2a3a25" />
-          <rect x="3" y="2" width="10" height="2" fill="#5a7a4a" />
-          <rect x="4" y="3" width="2" height="1" fill="#7a9a6a" />
-          <rect x="3" y="4" width="10" height="11" fill="#2a3a25" />
-          <rect x="4" y="5" width="8" height="9" fill="#7a9a8a" />
-          <rect x="5" y="6" width="1" height="7" fill="#3a4a35" />
-          <rect x="8" y="6" width="1" height="7" fill="#3a4a35" />
-          <rect x="11" y="6" width="1" height="7" fill="#3a4a35" />
-        </svg>
-      );
+        useEffect(() => {
+          if (!db || !user) return;
+          // 에러 수정: 파이어베이스의 문서 참조 경로는 짝수 개의 세그먼트여야 합니다. (컬렉션 경로가 아님)
+          // artifacts/{appId}/users/{user.uid}/diary_data/{docName} 구조로 6개의 짝수 세그먼트 설정 완료!
+          const docRef = doc(
+            db,
+            "artifacts",
+            appId,
+            "users",
+            user.uid,
+            "diary_data",
+            docName,
+          );
+          const unsubscribe = onSnapshot(
+            docRef,
+            (snapshot) => {
+              if (snapshot.exists()) {
+                setData(snapshot.data().value);
+              } else {
+                setDoc(docRef, { value: initialData });
+                setData(initialData);
+              }
+            },
+            (error) => {
+              console.error("동기화 에러:", error);
+            },
+          );
+          return () => unsubscribe();
+        }, [user, docName]);
 
-      const PixelStartIcon = ({ size = 16 }) => (
-        <svg
-          viewBox="0 0 16 16"
-          width={size}
-          height={size}
-          shapeRendering="crispEdges"
-          style={{ imageRendering: "pixelated" }}
-        >
-          <rect x="4" y="3" width="2" height="2" fill="#b87798" />
-          <rect x="10" y="3" width="2" height="2" fill="#b87798" />
-          <rect x="3" y="4" width="10" height="3" fill="#b87798" />
-          <rect x="4" y="7" width="8" height="2" fill="#b87798" />
-          <rect x="5" y="9" width="6" height="1" fill="#b87798" />
-          <rect x="6" y="10" width="4" height="1" fill="#b87798" />
-          <rect x="7" y="11" width="2" height="1" fill="#b87798" />
-          <rect x="4" y="4" width="1" height="1" fill="#e2a8c0" />
-          <rect x="11" y="4" width="1" height="1" fill="#e2a8c0" />
-        </svg>
-      );
-
-      const PixelCloudIcon = ({ size = 28, color = "#ebe4b8" }) => (
-        <svg
-          viewBox="0 0 16 16"
-          width={size}
-          height={size}
-          shapeRendering="crispEdges"
-          style={{ imageRendering: "pixelated" }}
-        >
-          <rect x="4" y="6" width="2" height="1" fill={color} />
-          <rect x="10" y="6" width="2" height="1" fill={color} />
-          <rect x="3" y="7" width="10" height="3" fill={color} />
-          <rect x="2" y="8" width="12" height="2" fill={color} />
-          <rect x="3" y="10" width="10" height="1" fill={color} />
-        </svg>
-      );
-
-      const PixelHydrangeaArt = ({ size = 96 }) => (
-        <svg
-          viewBox="0 0 32 32"
-          width={size}
-          height={size}
-          shapeRendering="crispEdges"
-          style={{ imageRendering: "pixelated" }}
-        >
-          <rect x="10" y="2" width="4" height="2" fill="#b87798" />
-          <rect x="18" y="2" width="4" height="2" fill="#9d6b9b" />
-          <rect x="8" y="4" width="16" height="3" fill="#b87798" />
-          <rect x="6" y="7" width="20" height="3" fill="#b87798" />
-          <rect x="9" y="10" width="14" height="2" fill="#9d6b9b" />
-          <rect x="11" y="3" width="2" height="1" fill="#e2a8c0" />
-          <rect x="14" y="5" width="2" height="2" fill="#e2a8c0" />
-          <rect x="20" y="5" width="2" height="2" fill="#e2a8c0" />
-          <rect x="9" y="7" width="2" height="2" fill="#e2a8c0" />
-          <rect x="13" y="6" width="1" height="1" fill="#f5d878" />
-          <rect x="19" y="6" width="1" height="1" fill="#f5d878" />
-          <rect x="16" y="9" width="1" height="1" fill="#f5d878" />
-          <rect x="3" y="11" width="6" height="2" fill="#5a7a4a" />
-          <rect x="2" y="12" width="6" height="3" fill="#5a7a4a" />
-          <rect x="4" y="13" width="2" height="1" fill="#7a9a6a" />
-          <rect x="23" y="11" width="6" height="2" fill="#5a7a4a" />
-          <rect x="24" y="12" width="6" height="3" fill="#5a7a4a" />
-          <rect x="26" y="13" width="2" height="1" fill="#7a9a6a" />
-          <rect x="15" y="12" width="2" height="6" fill="#5a7a4a" />
-          <rect x="6" y="18" width="20" height="2" fill="#2a3a25" />
-          <rect x="7" y="19" width="18" height="1" fill="#a8784a" />
-          <rect x="7" y="20" width="18" height="9" fill="#7a4a32" />
-          <rect x="8" y="21" width="16" height="7" fill="#a8784a" />
-          <rect x="9" y="22" width="3" height="2" fill="#c8966a" />
-          <rect x="6" y="29" width="20" height="1" fill="#2a3a25" />
-        </svg>
-      );
-
-      // ════════════════════════════════════════════════════════════
-      //   VIEW: TASKS
-      // ════════════════════════════════════════════════════════════
-      function TasksView({
-        energy,
-        setEnergy,
-        tasks,
-        handleSkip,
-        handleDone,
-        hydrangea,
-        waterCount,
-        isMicroMode,
-      }) {
-        const blocks = [
-          {
-            key: "morning",
-            title: "오전 워밍업",
-            subtitle: "MORNING",
-            icon: "☀",
-          },
-          {
-            key: "afternoon",
-            title: "오후 여백",
-            subtitle: "AFTERNOON",
-            icon: "✿",
-          },
-          {
-            key: "evening",
-            title: "저녁 100M",
-            subtitle: "EVENING",
-            icon: "☾",
-          },
-        ];
-        const getVisible = (key) =>
-          tasks.filter((t) => t.block === key && (!isMicroMode || t.isMicro));
-        const getHidden = (key) =>
-          isMicroMode ? tasks.filter((t) => t.block === key && !t.isMicro) : [];
-
-        return (
-          <div className="space-y-3">
-            <div className="pixel-card p-3 flex gap-3 items-center">
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-press text-[10px] text-olive-dark">
-                    ▸ MOTIVATION TEMP
-                  </span>
-                  <span className="font-press text-sm text-rose">
-                    {energy}/10
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={1}
-                  max={10}
-                  value={energy}
-                  onChange={(e) => setEnergy(Number(e.target.value))}
-                  className="pixel-slider w-full"
-                />
-                <div className="flex justify-between mt-1 font-press text-[8px] text-olive-dark/70">
-                  <span>EXHAUST</span>
-                  <span>RADIANT</span>
-                </div>
-              </div>
-              <div className="pixel-inset px-3 py-2 text-center min-w-[70px]">
-                <div className="text-2xl leading-none">{hydrangea.emoji}</div>
-                <div className="font-press text-[8px] text-olive-dark mt-1">
-                  💧{waterCount}
-                </div>
-              </div>
-            </div>
-
-            <div
-              className={`pixel-chip ${isMicroMode ? "pixel-chip-rose" : "pixel-chip-sky"}`}
-            >
-              <span>{isMicroMode ? "🕊" : "☀"}</span>
-              <span className="font-pixelify text-sm">
-                {isMicroMode
-                  ? "MICRO MODE — 가벼운 일만 보여줄게요"
-                  : "REGULAR MODE — 모든 일정 표시중"}
-              </span>
-            </div>
-
-            {blocks.map((b) => {
-              const visible = getVisible(b.key);
-              const hidden = getHidden(b.key);
-              return (
-                <div key={b.key} className="pixel-card p-3">
-                  <div className="flex items-center justify-between mb-2 pb-2 border-b-2 border-dashed border-olive-dark/30">
-                    <h3 className="font-press text-xs text-olive-dark flex items-center gap-2">
-                      <span className="text-base">{b.icon}</span>
-                      {b.title}
-                    </h3>
-                    <span className="font-press text-[8px] text-olive-dark/60">
-                      ▸{b.subtitle}
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    {visible.length === 0 && (
-                      <div className="text-center py-3 font-pixelify text-sm text-olive-dark/70">
-                        ✦ 모두 비웠어요. 푹 쉬어요 ✦
-                      </div>
-                    )}
-                    {visible.map((task) => (
-                      <div
-                        key={task.id}
-                        className={`pixel-task transition-all duration-500 ${
-                          task.status === "leaving"
-                            ? "opacity-0 -translate-x-3 scale-95"
-                            : "opacity-100"
-                        }`}
-                      >
-                        <span className="text-xl flex-shrink-0">
-                          {task.emoji}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-pixelify text-base text-olive-darker">
-                            {task.text}
-                          </div>
-                          {task.isMicro && (
-                            <div className="font-press text-[7px] text-rose">
-                              ✿ MICRO
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex gap-1 flex-shrink-0">
-                          <button
-                            onClick={() => handleSkip(task.id)}
-                            className="pixel-btn-sm pixel-btn-cream"
-                          >
-                            <span className="font-press text-[8px]">SKIP</span>
-                          </button>
-                          <button
-                            onClick={() => handleDone(task.id)}
-                            className="pixel-btn-sm pixel-btn-rose"
-                          >
-                            <span className="font-press text-[8px]">DONE</span>
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {hidden.length > 0 && (
-                    <div className="mt-3 pt-2 border-t-2 border-dashed border-olive-dark/30">
-                      <div className="font-pixelify text-xs text-olive-dark/70 italic flex items-center gap-1">
-                        🕊 {hidden.length}개의 무거운 일정은 살짝 가려뒀어요
-                      </div>
-                      <div className="mt-1 space-y-1 opacity-30">
-                        {hidden.map((t) => (
-                          <div
-                            key={t.id}
-                            className="font-pixelify text-sm text-olive-darker line-through"
-                          >
-                            {t.emoji} {t.text}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+        const updateData = (updater) => {
+          setData((prev) => {
+            const newData =
+              typeof updater === "function" ? updater(prev) : updater;
+            if (db && user) {
+              const docRef = doc(
+                db,
+                "artifacts",
+                appId,
+                "users",
+                user.uid,
+                "diary_data",
+                docName,
               );
-            })}
-          </div>
-        );
-      }
-
-      // ════════════════════════════════════════════════════════════
-      //   VIEW: GARDEN
-      // ════════════════════════════════════════════════════════════
-      function GardenView({ waterCount, hydrangea, setWaterCount, showToast }) {
-        const grow = () => {
-          setWaterCount((c) => c + 1);
-          showToast("💧 한 방울 더 주었어요");
+              setDoc(docRef, { value: newData }, { merge: true });
+            } else {
+              localStorage.setItem(
+                `angela_cloud_${docName}`,
+                JSON.stringify(newData),
+              );
+            }
+            return newData;
+          });
         };
-        const log = [
-          { mood: "✿", text: "DONE 버튼으로 +1 물주기" },
-          { mood: "♥", text: `현재 단계 — ${hydrangea.label}` },
-          { mood: "☼", text: "10번 물주면 활짝 피어요" },
-          { mood: "✦", text: "조급해하지 않아도 괜찮아요" },
-        ];
+
+        return [data, updateData];
+      };
+
+      // ════════════════════════════════════════════════════════════
+      //   STRAWBERRY MILK WIDGETS
+      // ════════════════════════════════════════════════════════════
+
+      const TamagotchiWidget = ({ time, isPerfect }) => (
+        <div
+          className={`relative w-32 h-36 bg-berry-DEFAULT rounded-[40px] border-4 border-berry-choco flex flex-col items-center pt-4 shadow-[4px_4px_0px_#5a3a41] transform -rotate-3 transition-transform ${isPerfect ? "animate-berry-bounce" : "hover:rotate-0"} shrink-0`}
+        >
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-3 bg-berry-DEFAULT border-4 border-berry-choco border-b-0 rounded-t-lg"></div>
+          {isPerfect && (
+            <div className="absolute -top-4 -right-4 text-4xl z-20">🎀</div>
+          )}
+          <div className="w-24 h-16 bg-berry-cream border-4 border-berry-choco rounded-xl flex items-center justify-center shadow-inner overflow-hidden relative">
+            <div className="absolute top-1 left-1 text-[10px] animate-pulse">
+              ✨
+            </div>
+            <div className="absolute bottom-1 right-1 text-[10px] animate-pulse">
+              🍓
+            </div>
+            {isPerfect ? (
+              <span className="text-2xl animate-pulse">😍</span>
+            ) : (
+              <span className="font-bold text-sm text-berry-choco">{time}</span>
+            )}
+          </div>
+          <div className="flex gap-2 mt-3">
+            <div className="w-3 h-3 bg-berry-matcha border-2 border-berry-choco rounded-full"></div>
+            <div className="w-4 h-4 bg-white border-2 border-berry-choco rounded-full translate-y-1"></div>
+            <div className="w-3 h-3 bg-berry-matcha border-2 border-berry-choco rounded-full"></div>
+          </div>
+        </div>
+      );
+
+      const DDayWidget = () => {
+        const [dDayText, setDDayText] = useState("");
+        useEffect(() => {
+          const target = new Date("2026-05-15T00:00:00");
+          const today = new Date();
+          const diffTime = target - today;
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          if (diffDays > 0) setDDayText(`D-${diffDays}`);
+          else if (diffDays === 0) setDDayText("D-DAY!");
+          else setDDayText(`D+${Math.abs(diffDays)}`);
+        }, []);
         return (
-          <div className="space-y-3">
-            <div className="pixel-card p-4 text-center">
-              <div className="font-press text-[10px] text-olive-dark mb-3">
-                ▸ MY HYDRANGEA
-              </div>
-              <div className="flex justify-center mb-3 anim-soft-bob">
-                <PixelHydrangeaArt size={120} />
-              </div>
-              <div className="font-press text-sm text-rose">
-                {hydrangea.label.toUpperCase()}
-              </div>
-              <div className="flex justify-center items-center gap-3 mt-3 flex-wrap">
-                <div className="pixel-inset px-3 py-1.5">
-                  <span className="font-press text-[9px] text-olive-dark">
-                    💧 {waterCount} DROPS
-                  </span>
-                </div>
-                <button
-                  onClick={grow}
-                  className="pixel-btn pixel-btn-rose px-3 py-1.5"
-                >
-                  <span className="font-press text-[9px]">+ WATER</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ GROWTH NOTES
-              </div>
-              <div className="space-y-1.5">
-                {log.map((l, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-2 font-pixelify text-sm text-olive-darker"
-                  >
-                    <span className="text-rose">{l.mood}</span>
-                    <span>{l.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ TIP OF THE DAY
-              </div>
-              <div className="font-pixelify text-sm text-olive-darker leading-snug">
-                🌿 수국은 천천히 자라요. 오늘 못 자라도 괜찮아요 — 내일도 햇빛은
-                충분하니까요.
-              </div>
-            </div>
+          <div className="hidden sm:flex flex-col items-center justify-center w-28 h-28 bg-berry-cream border-3 border-dashed border-berry-dark rounded-full shadow-[4px_4px_0px_#ffb3c6] transform rotate-3 hover:scale-110 transition-transform cursor-pointer shrink-0">
+            <span className="text-xs font-bold text-berry-choco">
+              첫 출근까지
+            </span>
+            <span className="text-2xl font-bold text-berry-dark mt-1 animate-pulse">
+              {dDayText}
+            </span>
+            <span className="text-[10px] mt-1 text-berry-choco opacity-70">
+              26.05.15
+            </span>
           </div>
         );
-      }
+      };
 
       // ════════════════════════════════════════════════════════════
-      //   VIEW: DIARY
+      //   DATA SOURCES
       // ════════════════════════════════════════════════════════════
-      function DiaryView({ mood, setMood, text, setText, entries, save }) {
-        const moods = [
-          { e: "🌤", l: "PEACE" },
-          { e: "🌸", l: "HAPPY" },
-          { e: "😴", l: "TIRED" },
-          { e: "🌧", l: "BLUE" },
-          { e: "🌪", l: "ANXY" },
-          { e: "🍂", l: "MEH" },
-        ];
-        return (
-          <div className="space-y-3">
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ TODAY I FEEL ...
-              </div>
-              <div className="grid grid-cols-6 gap-1.5">
-                {moods.map((m) => (
-                  <button
-                    key={m.e}
-                    onClick={() => setMood(m.e)}
-                    className={`pixel-btn flex flex-col items-center gap-0.5 py-2 transition-all duration-300 ${
-                      mood === m.e
-                        ? "pixel-btn-rose translate-y-[1px]"
-                        : "pixel-btn-cream"
-                    }`}
-                  >
-                    <span className="text-lg">{m.e}</span>
-                    <span className="font-press text-[7px]">{m.l}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
 
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ ONE LINE A DAY
-              </div>
-              <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="아주 짧아도 괜찮아요. 쉼표 하나여도 좋아요."
-                className="pixel-textarea w-full h-20 p-2 font-pixelify text-sm text-olive-darker resize-none"
-              />
-              <div className="flex justify-between items-center mt-2">
-                <div className="font-press text-[8px] text-olive-dark/70">
-                  {mood ? `MOOD ${mood}` : "PICK A MOOD"} · {text.length} CHARS
-                </div>
-                <button
-                  onClick={save}
-                  disabled={!mood || !text.trim()}
-                  className={`pixel-btn px-3 py-1.5 transition-all ${
-                    !mood || !text.trim()
-                      ? "opacity-40 cursor-not-allowed pixel-btn-cream"
-                      : "pixel-btn-rose"
-                  }`}
-                >
-                  <span className="font-press text-[9px]">SAVE ♥</span>
-                </button>
-              </div>
-            </div>
+      const initialBigPictureData = [
+        {
+          id: "career",
+          icon: "💻",
+          title: "커리어 (Career)",
+          text: "부동산 투자 자문 현장 실무 완벽 적응",
+          subtasks: [
+            {
+              id: "c1",
+              text: "5월 첫 출근복 예쁘게 입고 가기",
+              checked: false,
+            },
+            {
+              id: "c2",
+              text: "부동산 디벨로퍼 분석 로직 눈에 익히기",
+              checked: false,
+            },
+          ],
+        },
+        {
+          id: "study",
+          icon: "🎓",
+          title: "학업 (Long-term)",
+          text: "건국대 부동산 특수대학원 ➡️ 위스콘신 복수학위",
+          subtasks: [
+            {
+              id: "s1",
+              text: "10/31 공인중개사 1차 시험 경험하기",
+              checked: false,
+            },
+            {
+              id: "s2",
+              text: "출퇴근길 단어 10개씩 틈새 영단어장 보기",
+              checked: false,
+            },
+          ],
+        },
+        {
+          id: "finance",
+          icon: "💰",
+          title: "재무 (Financial)",
+          text: "3년 내 '1억 시드머니' 달성 (유학 5천 포함)",
+          subtasks: [
+            {
+              id: "f1",
+              text: "첫 월급으로 7:2:1 통장 쪼개기 세팅",
+              checked: false,
+            },
+            {
+              id: "f2",
+              text: "매월 미래자본 250만 원 자동이체 방어",
+              checked: false,
+            },
+          ],
+        },
+      ];
 
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ RECENT THOUGHTS
-              </div>
-              <div className="space-y-2">
-                {entries.length === 0 && (
-                  <div className="font-pixelify text-sm text-olive-dark/70 text-center py-3">
-                    ✦ 아직 적은 기록이 없어요 ✦
-                  </div>
-                )}
-                {entries.map((entry) => (
-                  <div key={entry.id} className="pixel-inset p-2 anim-fade-in">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-base">{entry.mood}</span>
-                      <span className="font-press text-[8px] text-olive-dark/70">
-                        {entry.date}
-                      </span>
-                    </div>
-                    <div className="font-pixelify text-sm text-olive-darker leading-snug">
-                      {entry.text}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      const initialMonthData = {
+        5: {
+          title: "🌸 5월: 소프트 랜딩 12일!",
+          tasks: [
+            { id: "h1", text: "▶ ⏰ 9-to-6 기본 루틴 ◀", isHeader: true },
+            {
+              id: "m5_4",
+              text: "[08:00] 기상, 아침식사, 출근 시뮬레이션",
+              checked: false,
+            },
+            {
+              id: "m5_5",
+              text: "[09:30] 🏢 오전: 부동산학개론 2강",
+              checked: false,
+            },
+            {
+              id: "m5_6",
+              text: "[11:30] ☕ 꿀휴식 & 🍱 점심 및 산책",
+              checked: false,
+            },
+            {
+              id: "m5_7",
+              text: "[14:00] 📚 오후: 아이엘츠 2~3강 & 복습",
+              checked: false,
+            },
+            {
+              id: "m5_8",
+              text: "[16:30] 🌿 퇴근 준비 및 내일 세팅",
+              checked: false,
+            },
+            {
+              id: "m5_9",
+              text: "[18:00] 🎉 완벽 퇴근! (공부 절대 금지)",
+              checked: false,
+            },
+            { id: "h2", text: "▶ 🗓️ 데일리 체크리스트 ◀", isHeader: true },
+            {
+              id: "m5_10",
+              text: "Day 1 (5/3 일): 🏢 부동산 2강 / 📚 영어 3강",
+              checked: false,
+            },
+            {
+              id: "m5_11",
+              text: "Day 2 (5/4 월): 🏢 부동산 2강 / 📚 영어 3강",
+              checked: false,
+            },
+            {
+              id: "m5_12",
+              text: "Day 3 (5/5 화): 🏢 부동산 2강 / 📚 영어 3강",
+              checked: false,
+            },
+            {
+              id: "m5_17",
+              text: "Day 8 (5/10 일): 🏢 부동산 2강 / 📚 영어 완강!🍷",
+              checked: false,
+            },
+            {
+              id: "m5_20",
+              text: "Day 11 (5/13 수): 학습지 03 / 🏢 부동산 완강!🎊",
+              checked: false,
+            },
+            {
+              id: "m5_22",
+              text: "D-DAY (5/15 금): 대망의 첫 출근! 씩씩하게!",
+              checked: false,
+            },
+          ],
+        },
+        6: {
+          title: "🌿 6월: 시스템 온에어",
+          tasks: [
+            { id: "h1", text: "▶ ⏰ 9-to-6 실전 루틴 ◀", isHeader: true },
+            {
+              id: "m6_1",
+              text: "[08:30] 출근길: 틈새 영단어장 10개 훑기 👀",
+              checked: false,
+            },
+            {
+              id: "m6_2",
+              text: "[09:00] 🏢 본업: 부동산 실무 낯선 용어 메모해두기",
+              checked: false,
+            },
+            {
+              id: "m6_3",
+              text: "[19:00] 🌙 퇴근 후: 낮은 죄책감 모드! 푹 쉬기",
+              checked: false,
+            },
+            {
+              id: "m6_4",
+              text: "[21:30] 💻 소확행: 머스타드 시드 클럽 만지작 🎀",
+              checked: false,
+            },
+            { id: "h2", text: "▶ 🗓️ 6월의 마일스톤 ◀", isHeader: true },
+            {
+              id: "m6_5",
+              text: "Week 1: 첫 월급! '250만 원 자동이체' 짜릿함 맛보기 💸",
+              checked: false,
+            },
+            {
+              id: "m6_6",
+              text: "Week 1 (주말): [IELTS] 아침 티타임 + 기초 인강 1편 시청 ☕",
+              checked: false,
+            },
+            {
+              id: "m6_7",
+              text: "Week 2: 혜린 님 만날 약속 잡고 '고체 퍼퓸' 선물 준비하기 🎁",
+              checked: false,
+            },
+            {
+              id: "m6_8",
+              text: "Week 2 (주말): '머스타드 시드 클럽' 디자인 살짝 업데이트 ✨",
+              checked: false,
+            },
+            {
+              id: "m6_9",
+              text: "Week 3: 회사에서 배운 실무 용어 3개만 노트에 정리해 보기 📝",
+              checked: false,
+            },
+            {
+              id: "m6_10",
+              text: "Week 3 (주말): [IELTS] 아침 티타임 + 기초 인강 1편 시청 ☕",
+              checked: false,
+            },
+            {
+              id: "m6_11",
+              text: "Week 4: 혜린 님 만나서 고체 퍼퓸 주고 따뜻한 시간 보내기 🌸",
+              checked: false,
+            },
+            {
+              id: "m6_12",
+              text: "Week 4 (주말): 재무 대시보드 보며 내 자신 쓰담쓰담 💰",
+              checked: false,
+            },
+            {
+              id: "m6_13",
+              text: "6월 30일: 무사히 적응한 나에게 딸기 우유 한 잔 건네기 🍓🥛",
+              checked: false,
+            },
+          ],
+        },
+        7: {
+          title: "☀️ 7월: 스마트한 예열",
+          tasks: [
+            { id: "h1", text: "▶ 🗓️ 7월의 마일스톤 ◀", isHeader: true },
+            {
+              id: "m7_1",
+              text: "부동산 디벨로퍼의 타당성 분석 로직 눈에 익히기",
+              checked: false,
+            },
+            {
+              id: "m7_2",
+              text: "[공인중개사] 출퇴근길 1차(학개론, 민법) 기초 인강 듣기",
+              checked: false,
+            },
+            {
+              id: "m7_3",
+              text: "[Python] 주말 하루 1시간, 가벼운 파이썬 무료 인강",
+              checked: false,
+            },
+          ],
+        },
+        8: {
+          title: "🌊 8월: 첫 번째 액션",
+          tasks: [
+            { id: "h1", text: "▶ 🗓️ 8월의 마일스톤 ◀", isHeader: true },
+            {
+              id: "m8_1",
+              text: "8/3~8/7 Q-Net 공인중개사 원서 접수 (★알람 맞추기!)",
+              checked: false,
+            },
+            {
+              id: "m8_2",
+              text: "여름휴가 혹은 주말을 활용해 뇌 비우고 충분한 휴식 취하기",
+              checked: false,
+            },
+            {
+              id: "m8_3",
+              text: "[공인중개사] 1차 과목(민법, 학개론) 이해 위주로 가볍게 반복",
+              checked: false,
+            },
+          ],
+        },
+        9: {
+          title: "🍁 9월: 무기 장착의 시작",
+          tasks: [
+            { id: "h1", text: "▶ 🗓️ 9월의 마일스톤 ◀", isHeader: true },
+            {
+              id: "m9_1",
+              text: "현장에서 겪은 고민거리를 '비밀 노트'에 기록 (학업계획서용)",
+              checked: false,
+            },
+            {
+              id: "m9_2",
+              text: "[공인중개사] 기출문제 위주로 빈출 파악 (과락 40점만 면하자!)",
+              checked: false,
+            },
+            {
+              id: "m9_3",
+              text: "[IELTS/Python] 시험이 다가오니 잠시 [Stop] 상태 유지하기",
+              checked: false,
+            },
+          ],
+        },
+        10: {
+          title: "🎯 10월: 가벼운 첫 도전",
+          tasks: [
+            { id: "h1", text: "▶ 🗓️ 10월의 마일스톤 ◀", isHeader: true },
+            {
+              id: "m10_1",
+              text: "10/31(토) 제37회 공인중개사 시험 응시 완료!",
+              checked: false,
+            },
+            {
+              id: "m10_2",
+              text: "전략: 1차만 집중 공략! 2차는 과감히 패스하고 꿀잠 자기.",
+              checked: false,
+            },
+            {
+              id: "m10_3",
+              text: "시험 끝난 날, 맛있는 저녁 먹으며 나 자신에게 큰 박수 쳐주기!",
+              checked: false,
+            },
+          ],
+        },
+        11: {
+          title: "❄️ 11월: 갈무리와 휴식",
+          tasks: [
+            { id: "h1", text: "▶ 🗓️ 11월의 마일스톤 ◀", isHeader: true },
+            {
+              id: "m11_1",
+              text: "베란다 수국 월동 준비 & 코카티엘 펄과 힐링 교감하기",
+              checked: false,
+            },
+            {
+              id: "m11_2",
+              text: "한 달간 무거운 공부(중개사 등)는 모두 내려놓고 푹 쉬기",
+              checked: false,
+            },
+            {
+              id: "m11_3",
+              text: "[IELTS/Python] 11월 말쯤부터 주말 활용해 다시 조금씩 진도 나가기",
+              checked: false,
+            },
+          ],
+        },
+        12: {
+          title: "🎄 12월: 천만 원 달성과 축배",
+          tasks: [
+            { id: "h1", text: "▶ 🗓️ 12월의 마일스톤 ◀", isHeader: true },
+            {
+              id: "m12_1",
+              text: "12/2(수) 공인중개사 합격자 발표 (어느 쪽이든 나에게 축배!)",
+              checked: false,
+            },
+            {
+              id: "m12_2",
+              text: "통장에 찍힌 '1,750만 원' 이상의 묵직한 시드머니 확인하기",
+              checked: false,
+            },
+            {
+              id: "m12_3",
+              text: "무사히 첫해를 넘긴 자랑스러운 안젤라, 따뜻한 연말 보내기",
+              checked: false,
+            },
+          ],
+        },
+      };
+
+      const vocabData = [
+        {
+          day: 1,
+          title: "Day 1 (단어 1~10)",
+          words: [
+            {
+              word: "justify",
+              synonyms: "legitimize, rationalize",
+              meaning: "v. 정당화하다",
+              example:
+                "Addicts can develop many excuses to justify their drug usage.",
+            },
+            {
+              word: "tremendous",
+              synonyms: "huge, immense, prodigious",
+              meaning: "adj. 엄청난, 거대한",
+              example:
+                "The factory's waste caused tremendous damage to the environment.",
+            },
+            {
+              word: "disperse",
+              synonyms: "spread, scatter",
+              meaning: "v. 흩어지게 하다, 흩뜨리다",
+              example:
+                "Dandelion seeds disperse when winds blow on their flowers.",
+            },
+            {
+              word: "cohesion",
+              synonyms: "unity, solidarity",
+              meaning: "n. 화합, 결합, 응집력",
+              example:
+                "Shared goals can bring about cohesion in groups with diverse members.",
+            },
+            {
+              word: "extinction",
+              synonyms: "disappearance, elimination",
+              meaning: "n. 멸종, 소멸",
+              example:
+                "Scientists believe a meteor strike caused the extinction of the dinosaurs.",
+            },
+            {
+              word: "slender",
+              synonyms: "thin, narrow, skinny",
+              meaning: "adj. 가느다란, 호리호리한",
+              example:
+                "Chemists often use slender glass tubes to collect liquids.",
+            },
+            {
+              word: "ample",
+              synonyms: "plentiful, abundant",
+              meaning: "adj. 풍부한, 충분한",
+              example: "The region has an ample supply of natural resources.",
+            },
+            {
+              word: "anomaly",
+              synonyms: "abnormality, irregularity",
+              meaning: "n. 이례적인 것, 예외",
+              example: "The sudden drop in temperature was a weather anomaly.",
+            },
+            {
+              word: "anticipate",
+              synonyms: "expect, foresee",
+              meaning: "v. 예상하다, 예측하다",
+              example: "We anticipate a large crowd at the concert tonight.",
+            },
+            {
+              word: "assert",
+              synonyms: "claim, declare",
+              meaning: "v. 주장하다, 단언하다",
+              example: "The lawyer asserted that his client was innocent.",
+            },
+          ],
+        },
+        {
+          day: 2,
+          title: "Day 2 (단어 11~20)",
+          words: [
+            {
+              word: "attribute",
+              synonyms: "ascribe, credit",
+              meaning: "v. ~의 탓으로 돌리다",
+              example: "He attributes his success to hard work.",
+            },
+            {
+              word: "authentic",
+              synonyms: "genuine, real",
+              meaning: "adj. 진정한, 진짜의",
+              example: "The museum has an authentic Van Gogh painting.",
+            },
+            {
+              word: "barrier",
+              synonyms: "obstacle, hurdle",
+              meaning: "n. 장벽, 장애물",
+              example: "Language can be a barrier to communication.",
+            },
+            {
+              word: "bias",
+              synonyms: "prejudice, partiality",
+              meaning: "n. 편견, 편향",
+              example: "The manager showed a clear bias towards the candidate.",
+            },
+            {
+              word: "capacity",
+              synonyms: "ability, capability",
+              meaning: "n. 용량, 수용력, 능력",
+              example: "The stadium has a seating capacity of 50,000.",
+            },
+            {
+              word: "chronic",
+              synonyms: "persistent, continuous",
+              meaning: "adj. 만성적인",
+              example: "She suffers from chronic back pain.",
+            },
+            {
+              word: "coherent",
+              synonyms: "logical, consistent",
+              meaning: "adj. 일관성 있는, 논리적인",
+              example: "He presented a coherent argument for his theory.",
+            },
+            {
+              word: "coincide",
+              synonyms: "occur simultaneously",
+              meaning: "v. 동시에 일어나다",
+              example: "My birthday coincides with a national holiday.",
+            },
+            {
+              word: "commence",
+              synonyms: "begin, start",
+              meaning: "v. 시작하다, 개시하다",
+              example: "The construction work will commence next week.",
+            },
+            {
+              word: "compile",
+              synonyms: "gather, collect",
+              meaning: "v. 엮다, 편집하다",
+              example: "We need to compile the data into a report.",
+            },
+          ],
+        },
+        {
+          day: 3,
+          title: "Day 3 (단어 21~30)",
+          words: [
+            {
+              word: "comprehensive",
+              synonyms: "thorough, inclusive",
+              meaning: "adj. 포괄적인, 종합적인",
+              example: "The guide provides a comprehensive overview.",
+            },
+            {
+              word: "comprise",
+              synonyms: "consist of, contain",
+              meaning: "v. 포함하다, 구성되다",
+              example: "The committee comprises five members.",
+            },
+            {
+              word: "concede",
+              synonyms: "admit, yield",
+              meaning: "v. 인정하다, 양보하다",
+              example: "He finally conceded defeat in the election.",
+            },
+            {
+              word: "concurrent",
+              synonyms: "simultaneous",
+              meaning: "adj. 동시에 발생하는",
+              example: "He is serving two concurrent prison sentences.",
+            },
+            {
+              word: "confine",
+              synonyms: "restrict, limit",
+              meaning: "v. 국한하다, 가두다",
+              example: "Please confine your remarks to the topic at hand.",
+            },
+            {
+              word: "consent",
+              synonyms: "agreement, permission",
+              meaning: "n. 동의, 허락",
+              example:
+                "No one may use the vehicle without the owner's consent.",
+            },
+            {
+              word: "consequence",
+              synonyms: "result, outcome",
+              meaning: "n. 결과, 중요성",
+              example: "Global warming is a consequence of pollution.",
+            },
+            {
+              word: "considerable",
+              synonyms: "significant, substantial",
+              meaning: "adj. 상당한, 많은",
+              example: "The project requires a considerable amount of money.",
+            },
+            {
+              word: "constant",
+              synonyms: "continuous, steady",
+              meaning: "adj. 끊임없는, 거듭되는",
+              example: "The machine needs a constant supply of water.",
+            },
+            {
+              word: "constraint",
+              synonyms: "restriction, limitation",
+              meaning: "n. 제약, 제한",
+              example: "Time constraints make it difficult to finish.",
+            },
+          ],
+        },
+        {
+          day: 4,
+          title: "Day 4 (단어 31~40)",
+          words: [
+            {
+              word: "contemplate",
+              synonyms: "consider, ponder",
+              meaning: "v. 고려하다, 심사숙고하다",
+              example: "I need time to contemplate your offer.",
+            },
+            {
+              word: "contradict",
+              synonyms: "deny, oppose",
+              meaning: "v. 모순되다, 부정하다",
+              example: "The witness's statement contradicts the evidence.",
+            },
+            {
+              word: "contrary",
+              synonyms: "opposite, reverse",
+              meaning: "adj. 반대의",
+              example: "Contrary to popular belief, bats are not blind.",
+            },
+            {
+              word: "controversy",
+              synonyms: "dispute, debate",
+              meaning: "n. 논란, 논쟁",
+              example: "The new tax policy caused a lot of controversy.",
+            },
+            {
+              word: "conventional",
+              synonyms: "traditional, standard",
+              meaning: "adj. 전통적인, 관습적인",
+              example: "She prefers conventional methods of cooking.",
+            },
+            {
+              word: "convey",
+              synonyms: "communicate, transmit",
+              meaning: "v. 전달하다, 운반하다",
+              example: "Colors can convey different moods and emotions.",
+            },
+            {
+              word: "core",
+              synonyms: "center, essence",
+              meaning: "n. 핵심, 중심",
+              example: "Trust is the core of any healthy relationship.",
+            },
+            {
+              word: "crucial",
+              synonyms: "critical, essential",
+              meaning: "adj. 중대한, 결정적인",
+              example: "Water is crucial for survival.",
+            },
+            {
+              word: "crude",
+              synonyms: "raw, unrefined",
+              meaning: "adj. 천연 그대로의, 대충의",
+              example: "The country exports a lot of crude oil.",
+            },
+            {
+              word: "cumulative",
+              synonyms: "accumulative",
+              meaning: "adj. 누적되는",
+              example: "The cumulative effect of pollution is alarming.",
+            },
+          ],
+        },
+        {
+          day: 5,
+          title: "Day 5 (단어 41~50)",
+          words: [
+            {
+              word: "deceive",
+              synonyms: "mislead, trick",
+              meaning: "v. 속이다, 기만하다",
+              example: "The advertisement was designed to deceive consumers.",
+            },
+            {
+              word: "dedicate",
+              synonyms: "devote, commit",
+              meaning: "v. 바치다, 전념하다",
+              example: "She dedicated her life to helping the poor.",
+            },
+            {
+              word: "deduce",
+              synonyms: "infer, conclude",
+              meaning: "v. 추론하다, 연역하다",
+              example: "We can deduce a lot from these statistics.",
+            },
+            {
+              word: "deficiency",
+              synonyms: "shortage, lack",
+              meaning: "n. 결핍, 부족",
+              example: "A vitamin deficiency can lead to health problems.",
+            },
+            {
+              word: "deliberate",
+              synonyms: "intentional, careful",
+              meaning: "adj. 의도적인, 신중한",
+              example: "It was a deliberate attempt to ruin his reputation.",
+            },
+            {
+              word: "denote",
+              synonyms: "indicate, signify",
+              meaning: "v. 조짐을 보여주다, 의미하다",
+              example: "A red sky at night often denotes good weather.",
+            },
+            {
+              word: "dense",
+              synonyms: "thick, heavy",
+              meaning: "adj. 빽빽한, 밀집한",
+              example: "The forest was so dense we couldn't see the sky.",
+            },
+            {
+              word: "deplete",
+              synonyms: "exhaust, use up",
+              meaning: "v. 대폭 감소시키다, 고갈시키다",
+              example: "Our natural resources are being depleted rapidly.",
+            },
+            {
+              word: "derive",
+              synonyms: "obtain, originate",
+              meaning: "v. 끌어내다, 유래하다",
+              example: "Many words in English derive from Latin.",
+            },
+            {
+              word: "deter",
+              synonyms: "discourage, prevent",
+              meaning: "v. 단념시키다, 방해하다",
+              example:
+                "High prices deter many young people from buying houses.",
+            },
+          ],
+        },
+        {
+          day: 6,
+          title: "Day 6 (단어 51~60)",
+          words: [
+            {
+              word: "deviate",
+              synonyms: "depart, diverge",
+              meaning: "v. 벗어나다, 빗나가다",
+              example: "The bus had to deviate from its usual route.",
+            },
+            {
+              word: "devise",
+              synonyms: "invent, formulate",
+              meaning: "v. 창안하다, 고안하다",
+              example: "They devised a plan to save the company.",
+            },
+            {
+              word: "dilemma",
+              synonyms: "predicament, difficulty",
+              meaning: "n. 딜레마, 궁지",
+              example: "She faced a moral dilemma over the issue.",
+            },
+            {
+              word: "dimension",
+              synonyms: "aspect, measurement",
+              meaning: "n. 차원, 크기",
+              example:
+                "We need to consider the political dimension of the problem.",
+            },
+            {
+              word: "diminish",
+              synonyms: "reduce, decrease",
+              meaning: "v. 줄어들다, 약해지다",
+              example: "His influence has diminished over the years.",
+            },
+            {
+              word: "discrete",
+              synonyms: "separate, distinct",
+              meaning: "adj. 별개의, 분리된",
+              example: "The process can be broken down into discrete steps.",
+            },
+            {
+              word: "displace",
+              synonyms: "replace, remove",
+              meaning: "v. 대체하다, 쫓아내다",
+              example: "Coal is gradually being displaced by renewable energy.",
+            },
+            {
+              word: "dispose",
+              synonyms: "discard, arrange",
+              meaning: "v. 배치하다, 처분하다",
+              example: "Please dispose of your litter thoughtfully.",
+            },
+            {
+              word: "disrupt",
+              synonyms: "disturb, interrupt",
+              meaning: "v. 방해하다, 지장을 주다",
+              example: "The strike will disrupt public transport.",
+            },
+            {
+              word: "distort",
+              synonyms: "deform, misrepresent",
+              meaning: "v. 비틀다, 왜곡하다",
+              example: "The media distorted the truth about the event.",
+            },
+          ],
+        },
+        {
+          day: 7,
+          title: "Day 7 (단어 61~70)",
+          words: [
+            {
+              word: "diverse",
+              synonyms: "various, varied",
+              meaning: "adj. 다양한",
+              example: "New York is a culturally diverse city.",
+            },
+            {
+              word: "domain",
+              synonyms: "area, field",
+              meaning: "n. 영역, 분야",
+              example: "Physics is outside my domain of expertise.",
+            },
+            {
+              word: "dynamic",
+              synonyms: "energetic, active",
+              meaning: "adj. 역동적인, 활발한",
+              example: "She has a very dynamic personality.",
+            },
+            {
+              word: "empirical",
+              synonyms: "observational, practical",
+              meaning: "adj. 경험적인, 실증적인",
+              example: "The theory is based on empirical evidence.",
+            },
+            {
+              word: "encounter",
+              synonyms: "meet, face",
+              meaning: "v. 맞닥뜨리다, 마주치다",
+              example: "We encountered several problems during the project.",
+            },
+            {
+              word: "entity",
+              synonyms: "being, organization",
+              meaning: "n. 독립체, 존재",
+              example: "The two companies are separate legal entities.",
+            },
+            {
+              word: "equivalent",
+              synonyms: "equal, identical",
+              meaning: "adj. 동등한, 맞먹는",
+              example: "A mile is roughly equivalent to 1.6 kilometers.",
+            },
+            {
+              word: "erode",
+              synonyms: "wear away, corrode",
+              meaning: "v. 침식하다, 약화시키다",
+              example: "The coastline has been eroded by the sea.",
+            },
+            {
+              word: "ethic",
+              synonyms: "moral, principle",
+              meaning: "n. 윤리, 도덕",
+              example: "Medical professionals follow a strict code of ethics.",
+            },
+            {
+              word: "evaluate",
+              synonyms: "assess, appraise",
+              meaning: "v. 평가하다, 감정하다",
+              example: "We need to evaluate the success of the campaign.",
+            },
+          ],
+        },
+        {
+          day: 8,
+          title: "Day 8 (단어 71~80)",
+          words: [
+            {
+              word: "exceed",
+              synonyms: "surpass, go beyond",
+              meaning: "v. 초과하다, 넘다",
+              example: "The cost must not exceed the budget.",
+            },
+            {
+              word: "explicit",
+              synonyms: "clear, direct",
+              meaning: "adj. 명백한, 뚜렷한",
+              example: "He gave me explicit instructions on what to do.",
+            },
+            {
+              word: "exploit",
+              synonyms: "utilize, take advantage of",
+              meaning: "v. 활용하다, 착취하다",
+              example: "The company was accused of exploiting its workers.",
+            },
+            {
+              word: "extract",
+              synonyms: "remove, draw out",
+              meaning: "v. 추출하다, 뽑아내다",
+              example: "Oil is extracted from the ground.",
+            },
+            {
+              word: "facilitate",
+              synonyms: "ease, aid",
+              meaning: "v. 용이하게 하다, 촉진하다",
+              example: "The new system will facilitate faster processing.",
+            },
+            {
+              word: "finite",
+              synonyms: "limited, restricted",
+              meaning: "adj. 유한한, 한정된",
+              example: "The earth has a finite supply of natural resources.",
+            },
+            {
+              word: "fluctuate",
+              synonyms: "vary, shift",
+              meaning: "v. 변동하다, 오르내리다",
+              example: "Stock prices fluctuate on a daily basis.",
+            },
+            {
+              word: "format",
+              synonyms: "layout, design",
+              meaning: "n. 구성, 체제",
+              example: "The format of the exam has changed this year.",
+            },
+            {
+              word: "framework",
+              synonyms: "structure, outline",
+              meaning: "n. 뼈대, 뼈대",
+              example:
+                "The treaty provides a framework for future negotiations.",
+            },
+            {
+              word: "fundamental",
+              synonyms: "basic, essential",
+              meaning: "adj. 근본적인, 핵심적인",
+              example: "Freedom of speech is a fundamental human right.",
+            },
+          ],
+        },
+        {
+          day: 9,
+          title: "Day 9 (단어 81~90)",
+          words: [
+            {
+              word: "hierarchy",
+              synonyms: "ranking, order",
+              meaning: "n. 계급, 위계질서",
+              example: "The military has a rigid hierarchy.",
+            },
+            {
+              word: "hypothesis",
+              synonyms: "theory, assumption",
+              meaning: "n. 가설, 추정",
+              example:
+                "Scientists conduct experiments to test their hypotheses.",
+            },
+            {
+              word: "ideology",
+              synonyms: "belief, doctrine",
+              meaning: "n. 이데올로기, 이념",
+              example:
+                "The two parties have very different political ideologies.",
+            },
+            {
+              word: "ignorant",
+              synonyms: "unaware, uneducated",
+              meaning: "adj. 무지한, 모르는",
+              example: "Many people are ignorant of their legal rights.",
+            },
+            {
+              word: "implicit",
+              synonyms: "implied, unspoken",
+              meaning: "adj. 암시된, 내포된",
+              example: "There was an implicit threat in his words.",
+            },
+            {
+              word: "incentive",
+              synonyms: "motivation, encouragement",
+              meaning: "n. 장려책, 동기",
+              example: "Bonus payments provide an incentive to work harder.",
+            },
+            {
+              word: "incidence",
+              synonyms: "occurrence, rate",
+              meaning: "n. 발생 정도, 발병률",
+              example: "There is a high incidence of malaria in this area.",
+            },
+            {
+              word: "incline",
+              synonyms: "tend, lean",
+              meaning: "v. 마음이 기울다, 경사지다",
+              example: "I incline to the view that he is innocent.",
+            },
+            {
+              word: "incorporate",
+              synonyms: "include, integrate",
+              meaning: "v. 포함하다, 설립하다",
+              example: "The new car incorporates several safety features.",
+            },
+            {
+              word: "induce",
+              synonyms: "cause, prompt",
+              meaning: "v. 설득하다, 유도하다",
+              example: "Nothing could induce me to vote for him.",
+            },
+          ],
+        },
+        {
+          day: 10,
+          title: "Day 10 (단어 91~100)",
+          words: [
+            {
+              word: "inevitable",
+              synonyms: "unavoidable, certain",
+              meaning: "adj. 불가피한, 필연적인",
+              example: "War now seems inevitable.",
+            },
+            {
+              word: "infer",
+              synonyms: "deduce, conclude",
+              meaning: "v. 추론하다",
+              example: "What can we infer from these statistics?",
+            },
+            {
+              word: "inherent",
+              synonyms: "intrinsic, innate",
+              meaning: "adj. 내재하는, 타고난",
+              example: "Risk is an inherent part of investing.",
+            },
+            {
+              word: "inhibit",
+              synonyms: "prevent, hinder",
+              meaning: "v. 억제하다, 못하게 하다",
+              example: "A lack of confidence inhibited his performance.",
+            },
+            {
+              word: "initiate",
+              synonyms: "start, begin",
+              meaning: "v. 시작하다, 개시하다",
+              example: "The government has initiated a new program.",
+            },
+            {
+              word: "innovate",
+              synonyms: "invent, pioneer",
+              meaning: "v. 혁신하다",
+              example: "Companies must innovate to stay competitive.",
+            },
+            {
+              word: "integral",
+              synonyms: "essential, fundamental",
+              meaning: "adj. 필수적인",
+              example: "Vegetables are an integral part of a healthy diet.",
+            },
+            {
+              word: "integrate",
+              synonyms: "combine, merge",
+              meaning: "v. 통합시키다",
+              example:
+                "We need to integrate the new software with the old system.",
+            },
+            {
+              word: "intervene",
+              synonyms: "step in, interfere",
+              meaning: "v. 개입하다, 중재하다",
+              example: "The police had to intervene to stop the fight.",
+            },
+            {
+              word: "intrinsic",
+              synonyms: "inherent, fundamental",
+              meaning: "adj. 고유한, 본질적인",
+              example: "The painting has no intrinsic value.",
+            },
+          ],
+        },
+        {
+          day: 11,
+          title: "Day 11 (단어 101~110)",
+          words: [
+            {
+              word: "tuition",
+              synonyms: "school fee, education cost",
+              meaning: "n. 수업료, 수업",
+              example:
+                "University tuition has risen much faster than inflation.",
+            },
+            {
+              word: "arduous",
+              synonyms: "difficult, exhausting",
+              meaning: "adj. 고된, 몹시 힘든",
+              example:
+                "Hannibal completed the arduous trek over the Alps on elephants.",
+            },
+            {
+              word: "conceive",
+              synonyms: "dream, imagine",
+              meaning: "v. 상상하다, 생각하다",
+              example:
+                "Most people cannot conceive of life without electricity.",
+            },
+            {
+              word: "blunt",
+              synonyms: "dull, round, unsharpened",
+              meaning: "adj. 뭉툭한, 퉁명스러운",
+              example:
+                "Sculptors use blunt tools to create initial breaks in stones.",
+            },
+            {
+              word: "strenuous",
+              synonyms: "difficult, arduous",
+              meaning: "adj. 힘든, 분투적인",
+              example:
+                "Patients with heart disease should avoid strenuous activities.",
+            },
+            {
+              word: "unprecedented",
+              synonyms: "unparalleled, new",
+              meaning: "adj. 전례 없는, 비길 데 없는",
+              example:
+                "Carson City received an unprecedented amount of rain this week.",
+            },
+            {
+              word: "reassure",
+              synonyms: "assure, comfort",
+              meaning: "v. 안심시키다",
+              example: "Being hugged tightly can reassure nervous children.",
+            },
+            {
+              word: "liberty",
+              synonyms: "freedom, autonomy",
+              meaning: "n. 자유",
+              example:
+                "Most western democracies are based on the idea of individual liberty.",
+            },
+            {
+              word: "obsolete",
+              synonyms: "outdated, outmoded",
+              meaning: "adj. 구식의, 한물간",
+              example: "Typewriters have become obsolete due to computers.",
+            },
+            {
+              word: "provoke",
+              synonyms: "incite, stimulate",
+              meaning: "v. 유발하다, 화나게 하다",
+              example: "The politician's speech provoked a strong reaction.",
+            },
+          ],
+        },
+      ];
+
+      // ════════════════════════════════════════════════════════════
+      //   VIEWS
+      // ════════════════════════════════════════════════════════════
+
+      const OverviewView = ({ showToast, user }) => {
+        const [motivation, setMotivation] = useFirestoreSync(
+          "overview_motivation",
+          "나는 내 속도대로, 가장 단단하고 우아하게 걷는다.",
+          user,
         );
-      }
+        const [goals, setGoals] = useFirestoreSync(
+          "overview_goals",
+          initialBigPictureData,
+          user,
+        );
+        const [letter, setLetter] = useFirestoreSync(
+          "overview_letter",
+          "",
+          user,
+        );
 
-      // ════════════════════════════════════════════════════════════
-      //   VIEW: SOUNDS
-      // ════════════════════════════════════════════════════════════
-      function SoundsView({
-        playingTrack,
-        setPlayingTrack,
-        breathing,
-        setBreathing,
-        showToast,
-      }) {
-        const tracks = [
-          {
-            id: "rain",
-            emoji: "🌧",
-            name: "GENTLE RAIN",
-            desc: "토독토독 — 창가의 비",
-          },
-          {
-            id: "stream",
-            emoji: "💧",
-            name: "FOREST STREAM",
-            desc: "졸졸 — 숲속 시냇물",
-          },
-          {
-            id: "wind",
-            emoji: "🍃",
-            name: "SOFT WIND",
-            desc: "솨아 — 나뭇잎 사이 바람",
-          },
-          {
-            id: "fire",
-            emoji: "🔥",
-            name: "FIREPLACE",
-            desc: "타닥타닥 — 작은 모닥불",
-          },
-          {
-            id: "lofi",
-            emoji: "🎹",
-            name: "LO-FI ROOM",
-            desc: "지지직 — 카세트 비트",
-          },
-        ];
+        const toggleSubtask = (goalId, subtaskId) => {
+          let wasChecked = false;
+          setGoals((prevGoals) =>
+            prevGoals.map((goal) => {
+              if (goal.id === goalId) {
+                return {
+                  ...goal,
+                  subtasks: goal.subtasks.map((sub) => {
+                    if (sub.id === subtaskId) {
+                      if (!sub.checked) wasChecked = true;
+                      return { ...sub, checked: !sub.checked };
+                    }
+                    return sub;
+                  }),
+                };
+              }
+              return goal;
+            }),
+          );
 
-        const toggle = (id) => {
-          if (playingTrack === id) {
-            setPlayingTrack(null);
-            showToast("⏸ 사운드를 멈췄어요");
-          } else {
-            setPlayingTrack(id);
-            showToast(`▶ ${tracks.find((t) => t.id === id)?.name}`);
+          if (wasChecked) {
+            setTimeout(() => showToast("퀘스트 달성! 멋져요 🍓✨"), 0);
           }
         };
 
         return (
-          <div className="space-y-3">
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ NOW PLAYING
+          <div className="flex flex-col gap-6 animate-[popIn_0.3s_ease-out] pb-10">
+            <div className="bg-berry-cream border-3 border-dashed border-berry-DEFAULT p-4 sm:p-6 rounded-3xl text-center shadow-[4px_4px_0px_#ffb3c6]">
+              <h2 className="text-xl font-bold mb-3 text-berry-choco flex justify-center items-center gap-2">
+                🎀 My Resolution 🎀
+              </h2>
+              <div className="relative group max-w-lg mx-auto">
+                <input
+                  type="text"
+                  value={motivation}
+                  onChange={(e) => setMotivation(e.target.value)}
+                  className="w-full text-center text-sm sm:text-base leading-relaxed text-berry-choco bg-transparent border-b-2 border-transparent hover:border-berry-light focus:border-berry-dark focus:outline-none transition-colors px-2 py-1 font-bold"
+                  placeholder="나만의 다짐을 적어보세요!"
+                />
+                <span className="absolute -right-6 top-1/2 -translate-y-1/2 text-xs opacity-0 group-hover:opacity-50 transition-opacity">
+                  ✏️
+                </span>
               </div>
-              <div className="pixel-inset h-24 relative overflow-hidden flex items-end justify-center gap-1 p-2">
-                <div className="absolute inset-0 bg-teal-pad opacity-30" />
-                {playingTrack ? (
-                  <>
-                    {[...Array(12)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="bg-rose w-2 anim-vis relative z-10"
-                        style={{
-                          height: `${30 + Math.random() * 50}%`,
-                          animationDelay: `${i * 0.08}s`,
-                          animationDuration: `${0.5 + Math.random() * 0.5}s`,
-                        }}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center font-press text-[10px] text-olive-dark/70">
-                    ◾ NO TRACK SELECTED ◾
-                  </div>
-                )}
-              </div>
-              {playingTrack && (
-                <div className="mt-2 font-pixelify text-sm text-olive-darker text-center">
-                  {tracks.find((t) => t.id === playingTrack)?.emoji}{" "}
-                  {tracks.find((t) => t.id === playingTrack)?.name}
-                </div>
-              )}
+              <span className="text-berry-dark font-bold bg-berry-bg px-3 py-1 rounded-full inline-block mt-3 border-2 border-berry-DEFAULT text-xs sm:text-sm">
+                💡 완벽하지 않아도 괜찮아! 낮은 죄책감 모드 유지!
+              </span>
             </div>
 
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ AMBIENT TRACKS
-              </div>
-              <div className="space-y-1.5">
-                {tracks.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => toggle(t.id)}
-                    className={`w-full pixel-btn flex items-center gap-3 px-3 py-2 transition-all duration-300 ${
-                      playingTrack === t.id
-                        ? "pixel-btn-rose"
-                        : "pixel-btn-cream"
-                    }`}
-                  >
-                    <span className="text-2xl">{t.emoji}</span>
-                    <div className="flex-1 text-left">
-                      <div className="font-press text-[9px]">{t.name}</div>
-                      <div className="font-pixelify text-xs">{t.desc}</div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2">
+              {goals.map((goal) => (
+                <div
+                  key={goal.id}
+                  className="berry-card p-4 sm:p-5 flex flex-col gap-3 bg-white"
+                >
+                  <div className="flex items-center gap-3 border-b-2 border-dashed border-berry-light pb-3">
+                    <div className="text-3xl bg-berry-bg p-2 rounded-2xl border-2 border-berry-DEFAULT shadow-[2px_2px_0px_#ffb3c6]">
+                      {goal.icon}
                     </div>
-                    <span className="font-press text-[10px]">
-                      {playingTrack === t.id ? "■" : "▶"}
-                    </span>
+                    <div>
+                      <h3 className="font-bold text-base sm:text-lg text-berry-choco">
+                        {goal.title}
+                      </h3>
+                      <p className="text-xs font-bold opacity-80 text-berry-choco leading-tight mt-1">
+                        {goal.text}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2 mt-1">
+                    <h4 className="text-xs font-bold text-berry-dark mb-1">
+                      ▶ Sub-Quests
+                    </h4>
+                    {goal.subtasks.map((sub) => (
+                      <div
+                        key={sub.id}
+                        onClick={() => toggleSubtask(goal.id, sub.id)}
+                        className={`flex items-start gap-2 p-2 rounded-xl border-2 cursor-pointer transition-colors ${sub.checked ? "bg-berry-bg border-berry-light opacity-70" : "bg-white border-berry-light hover:border-berry-DEFAULT"}`}
+                      >
+                        <div
+                          className={`text-sm transition-transform ${sub.checked ? "scale-110" : "scale-100 hover:scale-110"}`}
+                        >
+                          {sub.checked ? "🍓" : "🤍"}
+                        </div>
+                        <span
+                          className={`text-xs font-bold pt-0.5 ${sub.checked ? "line-through text-berry-choco opacity-60" : "text-berry-choco"}`}
+                        >
+                          {sub.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="berry-card bg-[#fffdf0] p-4 sm:p-6 mt-2 relative overflow-hidden">
+              <div className="absolute -right-4 -bottom-4 text-6xl opacity-20">
+                💌
+              </div>
+              <h3 className="font-bold text-lg text-berry-choco flex items-center gap-2 mb-4">
+                <span className="text-2xl">💌</span> 미래의 안젤라에게
+              </h3>
+              <p className="text-xs font-bold text-berry-choco opacity-70 mb-3">
+                2026년 12월 31일, 멋지게 목표를 이룬 나 자신에게 하고 싶은 말을
+                미리 적어두세요!
+              </p>
+
+              <textarea
+                value={letter}
+                onChange={(e) => setLetter(e.target.value)}
+                placeholder="안녕 안젤라! 1억 시드머니 달성 정말 축하해..."
+                className="w-full h-40 bg-transparent border-2 border-berry-light rounded-2xl p-4 text-sm font-bold text-berry-choco focus:outline-none focus:border-berry-dark resize-none letter-paper leading-loose"
+                style={{ lineHeight: "32px" }}
+              ></textarea>
+            </div>
+          </div>
+        );
+      };
+
+      const FinanceView = ({ showToast, user }) => {
+        const [savings, setSavings] = useFirestoreSync(
+          "finance_savings",
+          {
+            5: false,
+            6: false,
+            7: false,
+            8: false,
+            9: false,
+            10: false,
+            11: false,
+            12: false,
+          },
+          user,
+        );
+
+        const [wishlist, setWishlist] = useFirestoreSync(
+          "finance_wishlist",
+          [
+            { id: 1, text: "첫 출근 기념 예쁜 블라우스 사기", checked: false },
+            { id: 2, text: "혜린님 고체 퍼퓸 선물하기", checked: false },
+          ],
+          user,
+        );
+
+        const [newItem, setNewItem] = useState("");
+
+        const toggleSaving = (month) => {
+          const newState = !savings[month];
+          setSavings((prev) => ({ ...prev, [month]: newState }));
+          if (newState) showToast(`예에! ${month}월 저축 완료! 🐷🍓`);
+        };
+
+        const addWishlistItem = (e) => {
+          e.preventDefault();
+          if (!newItem.trim()) return;
+          setWishlist((prev) => [
+            ...prev,
+            { id: Date.now(), text: newItem, checked: false },
+          ]);
+          setNewItem("");
+          showToast("위시리스트 추가 완료! 🎀");
+        };
+
+        const toggleWishlist = (id) => {
+          setWishlist((prev) =>
+            prev.map((item) =>
+              item.id === id ? { ...item, checked: !item.checked } : item,
+            ),
+          );
+        };
+
+        const deleteWishlist = (id) => {
+          setWishlist((prev) => prev.filter((item) => item.id !== id));
+        };
+
+        const months = [5, 6, 7, 8, 9, 10, 11, 12];
+        const seedData = [125, 375, 625, 875, 1125, 1375, 1625, 1875];
+
+        return (
+          <div className="flex flex-col gap-6 animate-[popIn_0.3s_ease-out] pb-10">
+            <div className="berry-card p-5">
+              <h3 className="font-bold text-lg mb-3 text-berry-choco flex items-center gap-2">
+                💰 '1억행 KTX' 자산 배분 (세후 350 기준)
+              </h3>
+              <div className="w-full h-8 flex rounded-full overflow-hidden border-3 border-berry-choco mb-4 shadow-[3px_3px_0px_#ffb3c6]">
+                <div
+                  className="bg-berry-dark flex items-center justify-center text-white text-xs font-bold"
+                  style={{ width: "70%" }}
+                >
+                  저축 70%
+                </div>
+                <div
+                  className="bg-berry-DEFAULT border-x-3 border-berry-choco flex items-center justify-center text-white text-xs font-bold"
+                  style={{ width: "20%" }}
+                >
+                  생활 20%
+                </div>
+                <div
+                  className="bg-berry-light flex items-center justify-center text-berry-choco text-xs font-bold"
+                  style={{ width: "10%" }}
+                >
+                  나 10%
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-4">
+                <div className="berry-card p-5 flex-1">
+                  <h3 className="font-bold text-lg mb-4 text-berry-choco flex items-center gap-2 bg-berry-light/30 inline-block px-3 py-1 rounded-xl">
+                    🐷 월급날 저축 트래커 (월 250)
+                  </h3>
+                  <div className="grid grid-cols-4 gap-3">
+                    {months.map((m) => (
+                      <div
+                        key={m}
+                        onClick={() => toggleSaving(m)}
+                        className={`flex flex-col items-center justify-center py-3 rounded-2xl border-2 cursor-pointer transition-transform hover:scale-105 shadow-sm ${savings[m] ? "bg-berry-bg border-berry-dark shadow-[2px_2px_0px_#ff4d6d]" : "bg-white border-berry-grid border-dashed"}`}
+                      >
+                        <span
+                          className={`text-2xl transition-all ${savings[m] ? "scale-110 opacity-100" : "grayscale opacity-30"}`}
+                        >
+                          🍓
+                        </span>
+                        <span
+                          className={`text-xs font-bold mt-1 ${savings[m] ? "text-berry-dark" : "text-berry-grid"}`}
+                        >
+                          {m}월
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="berry-card p-5">
+                  <h3 className="font-bold text-lg mb-2 text-berry-choco flex items-center gap-2">
+                    📈 시드머니 탑 쌓기 현황
+                  </h3>
+                  <div className="h-32 border-b-4 border-l-4 border-berry-choco flex items-end justify-between px-2 pt-4 relative mt-4 bg-white rounded-tr-lg">
+                    <div className="absolute top-0 left-2 text-[10px] text-berry-choco opacity-70 font-bold">
+                      (단위: 만원)
+                    </div>
+                    {months.map((m, idx) => {
+                      const isSaved = savings[m];
+                      return (
+                        <div
+                          key={m}
+                          className={`w-[10%] border-2 border-b-0 rounded-t-sm flex flex-col justify-end items-center pb-1 relative group transition-all duration-500 ${isSaved ? "bg-berry-dark border-berry-choco h-full shadow-inner" : "bg-berry-grid/30 border-transparent border-dashed"}`}
+                          style={{
+                            height: isSaved
+                              ? `${(seedData[idx] / 2000) * 100}%`
+                              : "10%",
+                          }}
+                        >
+                          {isSaved && (
+                            <div className="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity z-10 font-bold bg-white border-2 border-berry-choco rounded-lg px-1 text-[10px] whitespace-nowrap shadow-[2px_2px_0px_#ffb3c6]">
+                              {seedData[idx]}만
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="flex justify-between text-[10px] mt-2 px-2 font-bold text-berry-choco">
+                    {months.map((m) => (
+                      <div key={m} className="w-[10%] text-center">
+                        {m}월
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="berry-card p-5 flex flex-col">
+                <h3 className="font-bold text-lg mb-2 text-berry-choco flex items-center gap-2 bg-berry-yellow/40 inline-block px-3 py-1 rounded-xl bg-white border-2 border-berry-DEFAULT">
+                  🎀 소확행 위시리스트 (월 30)
+                </h3>
+                <p className="text-xs text-berry-choco opacity-80 mb-4 font-bold">
+                  10%의 예산은 오직 나를 위해! 갖고 싶은 것, 하고 싶은 것을
+                  적어봐요.
+                </p>
+
+                <form onSubmit={addWishlistItem} className="flex gap-2 mb-4">
+                  <input
+                    type="text"
+                    value={newItem}
+                    onChange={(e) => setNewItem(e.target.value)}
+                    placeholder="예) 귀여운 다이어리 사기"
+                    className="flex-1 bg-berry-bg border-2 border-berry-choco rounded-xl px-3 py-2 text-sm font-bold text-berry-choco focus:outline-none focus:border-berry-dark"
+                  />
+                  <button
+                    type="submit"
+                    className="berry-btn px-3 py-2 text-sm font-bold whitespace-nowrap"
+                  >
+                    추가
+                  </button>
+                </form>
+
+                <div className="flex-1 overflow-y-auto space-y-3 bg-berry-bg/50 rounded-xl p-2 border-2 border-dashed border-berry-grid">
+                  {wishlist.length === 0 && (
+                    <p className="text-center text-sm text-berry-choco opacity-50 mt-4 font-bold">
+                      아직 위시리스트가 없어요!
+                    </p>
+                  )}
+                  {wishlist.map((item) => (
+                    <div
+                      key={item.id}
+                      className={`flex items-center justify-between p-3 rounded-xl border-2 transition-all ${item.checked ? "bg-white border-berry-grid opacity-60" : "bg-white border-berry-DEFAULT shadow-[2px_2px_0px_#ffb3c6]"}`}
+                    >
+                      <div
+                        className="flex items-center gap-3 cursor-pointer flex-1"
+                        onClick={() => toggleWishlist(item.id)}
+                      >
+                        <div
+                          className={`text-xl transition-transform ${item.checked ? "scale-110" : "hover:scale-110"}`}
+                        >
+                          {item.checked ? "💖" : "🤍"}
+                        </div>
+                        <span
+                          className={`text-sm font-bold ${item.checked ? "line-through text-berry-choco opacity-70" : "text-berry-choco"}`}
+                        >
+                          {item.text}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => deleteWishlist(item.id)}
+                        className="text-xs text-berry-choco opacity-50 hover:opacity-100 p-1"
+                      >
+                        ✖
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const TimelineView = ({
+        tasks,
+        setTasks,
+        activeMonth,
+        setActiveMonth,
+        showToast,
+      }) => {
+        const progress = useMemo(() => {
+          const checklist =
+            tasks[activeMonth]?.tasks.filter((t) => !t.isHeader) || [];
+          if (checklist.length === 0) return 0;
+          const completed = checklist.filter((t) => t.checked).length;
+          return Math.round((completed / checklist.length) * 100);
+        }, [tasks, activeMonth]);
+
+        const toggleTask = (monthId, taskId) => {
+          setTasks((prev) => {
+            const currentTasks = prev[monthId].tasks;
+            const task = currentTasks.find((t) => t.id === taskId);
+
+            if (!task || task.isHeader) return prev;
+
+            if (!task.checked) {
+              setTimeout(() => {
+                const msgs = [
+                  "완벽해요! 🍓",
+                  "딸기우유 한 잔! 🥛",
+                  "달콤한 성취! 🍰",
+                  "참 잘했어요! 💖",
+                ];
+                showToast(msgs[Math.floor(Math.random() * msgs.length)]);
+              }, 0);
+            }
+
+            return {
+              ...prev,
+              [monthId]: {
+                ...prev[monthId],
+                tasks: currentTasks.map((t) =>
+                  t.id === taskId ? { ...t, checked: !t.checked } : t,
+                ),
+              },
+            };
+          });
+        };
+
+        return (
+          <div className="flex flex-col md:flex-row gap-6 animate-[popIn_0.3s_ease-out]">
+            <div className="flex md:flex-col overflow-x-auto md:overflow-visible gap-2 pb-2 md:w-28 shrink-0 hide-scrollbar">
+              {Object.keys(tasks).map((month) => (
+                <button
+                  key={month}
+                  onClick={() => setActiveMonth(month)}
+                  className={`px-4 py-3 font-bold rounded-2xl border-3 border-berry-choco transition-all shrink-0 ${activeMonth == month ? "bg-berry-dark text-white shadow-[4px_4px_0px_#5a3a41] translate-x-1" : "bg-berry-cream text-berry-choco hover:bg-berry-light/50"}`}
+                >
+                  {month}월
+                </button>
+              ))}
+            </div>
+
+            <div className="flex-1 berry-card p-4 sm:p-6 min-h-[400px]">
+              <div className="mb-6 pb-4 border-b-3 border-dashed border-berry-DEFAULT">
+                <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2 mb-4 text-berry-choco">
+                  <span className="text-3xl">🥛</span>{" "}
+                  {tasks[activeMonth]?.title || "준비중!"}
+                </h2>
+                <div className="px-2">
+                  <div className="flex justify-between text-xs font-bold mb-1 text-berry-choco">
+                    <span>나의 진도율 🐰</span>
+                    <span className="text-berry-dark">{progress}%</span>
+                  </div>
+                  <div className="progress-bar-container">
+                    <div
+                      className="progress-bar-fill"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4 pb-10">
+                {tasks[activeMonth]?.tasks.map((task) =>
+                  task.isHeader ? (
+                    <div
+                      key={task.id}
+                      className="font-bold text-berry-dark mt-8 mb-3 bg-berry-light/40 py-2 px-4 rounded-full inline-block border-2 border-berry-DEFAULT"
+                    >
+                      {task.text}
+                    </div>
+                  ) : (
+                    <div
+                      key={task.id}
+                      onClick={() => toggleTask(activeMonth, task.id)}
+                      className={`flex items-start gap-3 p-3 rounded-2xl transition-all cursor-pointer border-2 select-none ${task.checked ? "bg-berry-bg border-transparent opacity-80" : "bg-berry-cream border-berry-light hover:border-berry-DEFAULT"}`}
+                    >
+                      <div className="relative w-6 h-6 flex shrink-0 justify-center items-center">
+                        <div
+                          className={`text-xl transition-transform ${task.checked ? "scale-110" : "hover:scale-110"}`}
+                        >
+                          {task.checked ? "🍓" : "🤍"}
+                        </div>
+                      </div>
+                      <span
+                        className={`font-bold text-berry-choco leading-relaxed pt-0.5 ${task.checked ? "line-through decoration-berry-dark decoration-2 opacity-60" : ""}`}
+                      >
+                        {task.text}
+                      </span>
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const VocabView = ({ showToast, user }) => {
+        const [activeDay, setActiveDay] = useState(1);
+        const [hideMeaning, setHideMeaning] = useState(false);
+        const [memorized, setMemorized] = useFirestoreSync(
+          "vocab_progress",
+          {},
+          user,
+        );
+
+        const toggleWord = (word) => {
+          const isDone = !memorized[word];
+          setMemorized((prev) => ({ ...prev, [word]: isDone }));
+          if (isDone) showToast("외웠다! 딸기 하나 추가요! 🍓✨");
+        };
+
+        const activeData =
+          vocabData.find((d) => d.day === activeDay) || vocabData[0];
+
+        return (
+          <div className="flex flex-col gap-4 animate-[popIn_0.3s_ease-out]">
+            <div className="flex flex-col sm:flex-row justify-between items-center bg-berry-cream border-3 border-dashed border-berry-DEFAULT p-4 rounded-3xl gap-4 shadow-[4px_4px_0px_#ffb3c6]">
+              <div>
+                <h2 className="text-xl font-bold text-berry-choco flex items-center gap-2">
+                  <span className="text-2xl">📖</span> 틈새 영단어장
+                </h2>
+                <p className="text-sm font-bold text-berry-choco opacity-70 mt-1">
+                  매일 10개씩! 달콤하게 외워봐요 🍓
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl border-2 border-berry-DEFAULT shadow-sm">
+                <span className="text-sm font-bold text-berry-choco">
+                  🙈 뜻 가리기 테스트
+                </span>
+                <div className="relative inline-block w-10 h-6 align-middle select-none transition duration-200 ease-in">
+                  <input
+                    type="checkbox"
+                    className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-berry-DEFAULT appearance-none cursor-pointer hidden-check"
+                    checked={hideMeaning}
+                    onChange={(e) => setHideMeaning(e.target.checked)}
+                    id="blindToggle"
+                    style={{
+                      display: "block",
+                      right: hideMeaning ? "0" : "16px",
+                    }}
+                  />
+                  <label
+                    htmlFor="blindToggle"
+                    className="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer border-2 border-berry-DEFAULT"
+                    style={{
+                      backgroundColor: hideMeaning ? "#ff4d6d" : "#ffc2d1",
+                    }}
+                  ></label>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex md:flex-col overflow-x-auto gap-2 pb-2 md:w-32 shrink-0 hide-scrollbar">
+                {vocabData.map((d) => (
+                  <button
+                    key={d.day}
+                    onClick={() => setActiveDay(d.day)}
+                    className={`px-3 py-3 font-bold rounded-2xl border-3 border-berry-choco transition-all shrink-0 text-center sm:text-left ${activeDay === d.day ? "bg-berry-dark text-white shadow-[4px_4px_0px_#5a3a41] translate-x-1" : "bg-berry-cream text-berry-choco hover:bg-berry-light/50"}`}
+                  >
+                    Day {d.day}
                   </button>
                 ))}
               </div>
-            </div>
 
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ BREATHE WITH ME
-              </div>
-              <div className="flex flex-col items-center gap-3 py-2">
-                <div
-                  className={`pixel-breath-circle ${breathing ? "anim-breath" : ""}`}
-                >
-                  <span className="font-press text-[10px] text-olive-darker text-center leading-tight whitespace-pre-line">
-                    {breathing ? "IN ··· OUT" : "TAP TO\nSTART"}
-                  </span>
-                </div>
-                <button
-                  onClick={() => setBreathing(!breathing)}
-                  className={`pixel-btn px-4 py-2 ${breathing ? "pixel-btn-rose" : "pixel-btn-cream"}`}
-                >
-                  <span className="font-press text-[9px]">
-                    {breathing ? "◾ STOP" : "▶ BEGIN"}
-                  </span>
-                </button>
-                <div className="font-pixelify text-xs text-olive-dark/80 text-center max-w-xs">
-                  동그라미와 함께 호흡해 보세요 — 들이쉴 때 커지고, 내쉴 때
-                  작아져요.
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      }
+              <div className="flex-1 space-y-4 pb-10">
+                <h3 className="font-bold text-lg text-white bg-berry-DEFAULT inline-block px-4 py-1 rounded-full border-2 border-berry-choco mb-2 shadow-sm">
+                  {activeData.title}
+                </h3>
 
-      // ════════════════════════════════════════════════════════════
-      //   VIEW: BIN (Worry Release)
-      // ════════════════════════════════════════════════════════════
-      function BinView({
-        worryInput,
-        setWorryInput,
-        releasedCount,
-        releaseWorry,
-      }) {
-        const affirmations = [
-          "걱정의 90%는 일어나지 않아요 ✦",
-          "오늘의 무거움은 오늘만의 것이에요 🕊",
-          "잠시 내려놓아도 사라지지 않아요 ☁",
-          "걱정한다고 해결되지 않으니, 일단 보내요 ♥",
-        ];
-        const todayQuote = affirmations[releasedCount % affirmations.length];
+                {activeData.words.map((w, idx) => (
+                  <div
+                    key={idx}
+                    className={`berry-card p-4 sm:p-5 flex gap-4 items-start transition-opacity ${memorized[w.word] ? "opacity-60 bg-berry-bg" : ""}`}
+                  >
+                    <button
+                      onClick={() => toggleWord(w.word)}
+                      className="mt-1 text-2xl transition-transform hover:scale-110 shrink-0"
+                    >
+                      {memorized[w.word] ? "🍓" : "🤍"}
+                    </button>
 
-        return (
-          <div className="space-y-3">
-            <div className="pixel-card p-4 text-center">
-              <div className="font-press text-[10px] text-olive-dark mb-3">
-                ▸ RELEASE YOUR WORRIES
-              </div>
-              <div className="text-5xl mb-2 anim-soft-bob inline-block">☁️</div>
-              <div className="font-press text-base text-rose mb-1">
-                {releasedCount}
-              </div>
-              <div className="font-press text-[9px] text-olive-dark/80">
-                WORRIES RELEASED TO SKY
-              </div>
-            </div>
+                    <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 mb-2">
+                        <h4
+                          className={`text-xl font-bold text-berry-choco ${memorized[w.word] ? "line-through decoration-berry-dark decoration-2" : ""}`}
+                        >
+                          {w.word}
+                        </h4>
+                        <span className="text-sm font-bold text-berry-choco bg-berry-grid px-2 py-0.5 rounded-md">
+                          = {w.synonyms}
+                        </span>
+                      </div>
 
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ WHAT'S WEIGHING YOU DOWN?
-              </div>
-              <textarea
-                value={worryInput}
-                onChange={(e) => setWorryInput(e.target.value)}
-                placeholder="머릿속을 떠도는 걱정 한 가지를 적어보세요..."
-                className="pixel-textarea w-full h-20 p-2 font-pixelify text-sm text-olive-darker resize-none"
-              />
-              <button
-                onClick={releaseWorry}
-                disabled={!worryInput.trim()}
-                className={`mt-2 w-full pixel-btn py-2 transition-all ${
-                  !worryInput.trim()
-                    ? "opacity-40 cursor-not-allowed pixel-btn-cream"
-                    : "pixel-btn-rose"
-                }`}
-              >
-                <span className="font-press text-[10px]">
-                  ☁ RELEASE TO THE SKY ☁
-                </span>
-              </button>
-            </div>
-
-            <div className="pixel-card p-3">
-              <div className="font-press text-[10px] text-olive-dark mb-2">
-                ▸ TODAY'S WHISPER
-              </div>
-              <div className="font-pixelify text-sm text-olive-darker text-center py-2 leading-relaxed">
-                {todayQuote}
+                      <div
+                        className={`mt-3 space-y-2 ${hideMeaning ? "blind-text px-3 py-2" : ""}`}
+                      >
+                        <p className="font-bold text-berry-dark text-base">
+                          {w.meaning}
+                        </p>
+                        <p className="text-sm text-berry-choco leading-relaxed italic border-l-3 border-berry-DEFAULT pl-2">
+                          "{w.example}"
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         );
-      }
+      };
 
       // ════════════════════════════════════════════════════════════
-      //   MAIN APP
+      //   MAIN APP COMPONENT (With Firebase Auth)
       // ════════════════════════════════════════════════════════════
       function App() {
-        const [activeView, setActiveView] = useState("tasks");
-        const [now, setNow] = useState(new Date());
+        const [activeView, setActiveView] = useState("timeline");
+        const [time, setTime] = useState("");
         const [toast, setToast] = useState(null);
+        const [activeMonth, setActiveMonth] = useState(5);
+        const [user, setUser] = useState(null);
+        const [authLoading, setAuthLoading] = useState(true);
 
-        const [energy, setEnergy] = useState(7);
-        const [waterCount, setWaterCount] = useState(3);
-        const [tasks, setTasks] = useState([
-          {
-            id: 1,
-            block: "morning",
-            emoji: "📖",
-            text: "단어 15개 훑기",
-            isMicro: true,
-            status: "active",
-          },
-          {
-            id: 2,
-            block: "morning",
-            emoji: "🌿",
-            text: "수국 잎 닦아주기",
-            isMicro: true,
-            status: "active",
-          },
-          {
-            id: 3,
-            block: "morning",
-            emoji: "🏢",
-            text: "분기 보고서 마감",
-            isMicro: false,
-            status: "active",
-          },
-          {
-            id: 4,
-            block: "afternoon",
-            emoji: "🍵",
-            text: "캐모마일 한 잔",
-            isMicro: true,
-            status: "active",
-          },
-          {
-            id: 5,
-            block: "afternoon",
-            emoji: "🌤️",
-            text: "5분 환기하기",
-            isMicro: true,
-            status: "active",
-          },
-          {
-            id: 6,
-            block: "afternoon",
-            emoji: "💪",
-            text: "헬스장 1시간",
-            isMicro: false,
-            status: "active",
-          },
-          {
-            id: 7,
-            block: "evening",
-            emoji: "✍️",
-            text: "한 줄 일기 끄적이기",
-            isMicro: true,
-            status: "active",
-          },
-          {
-            id: 8,
-            block: "evening",
-            emoji: "🧘",
-            text: "3분 호흡 명상",
-            isMicro: true,
-            status: "active",
-          },
-          {
-            id: 9,
-            block: "evening",
-            emoji: "💻",
-            text: "사이드 프로젝트 1시간",
-            isMicro: false,
-            status: "active",
-          },
-        ]);
-
-        const [diaryMood, setDiaryMood] = useState(null);
-        const [diaryText, setDiaryText] = useState("");
-        const [diaryEntries, setDiaryEntries] = useState([
-          {
-            id: 1,
-            mood: "🌤",
-            text: "구름 보면서 산책했음. 바람이 좋았다.",
-            date: "2일 전",
-          },
-          {
-            id: 2,
-            mood: "😴",
-            text: "오늘은 그냥 누워있었다. 그래도 괜찮아.",
-            date: "3일 전",
-          },
-          {
-            id: 3,
-            mood: "🌸",
-            text: "수국에 처음 꽃이 피었다. 작지만 핑크.",
-            date: "5일 전",
-          },
-        ]);
-
-        const [worryInput, setWorryInput] = useState("");
-        const [releasedCount, setReleasedCount] = useState(7);
-        const [floatingWorries, setFloatingWorries] = useState([]);
-
-        const [playingTrack, setPlayingTrack] = useState(null);
-        const [breathing, setBreathing] = useState(false);
-
+        // Firebase Auth 처리
         useEffect(() => {
-          const t = setInterval(() => setNow(new Date()), 1000);
-          return () => clearInterval(t);
+          if (!auth) {
+            setAuthLoading(false);
+            return;
+          }
+          const initAuth = async () => {
+            try {
+              if (
+                typeof __initial_auth_token !== "undefined" &&
+                __initial_auth_token
+              ) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+              } else {
+                await signInAnonymously(auth);
+              }
+            } catch (error) {
+              console.error("Auth 에러", error);
+            }
+          };
+          initAuth();
+          const unsubscribe = onAuthStateChanged(auth, (u) => {
+            setUser(u);
+            setAuthLoading(false);
+          });
+          return () => unsubscribe();
         }, []);
 
-        const isMicroMode = energy <= 3;
-        const hydrangea =
-          waterCount < 3
-            ? { emoji: "🌱", label: "씨앗" }
-            : waterCount < 6
-              ? { emoji: "🌿", label: "잎사귀" }
-              : { emoji: "🌸", label: "활짝 핀 수국" };
-        const time = now.toLocaleTimeString("en-US", {
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-        });
+        const [tasks, setTasks] = useFirestoreSync(
+          "timeline_tasks",
+          initialMonthData,
+          user,
+        );
+
+        useEffect(() => {
+          const updateTime = () => {
+            const now = new Date();
+            let h = now.getHours();
+            let m = now.getMinutes();
+            const ampm = h >= 12 ? "PM" : "AM";
+            h = h % 12 || 12;
+            m = m < 10 ? "0" + m : m;
+            setTime(`${h}:${m} ${ampm}`);
+          };
+          updateTime();
+          const timer = setInterval(updateTime, 1000);
+          return () => clearInterval(timer);
+        }, []);
 
         const showToast = (msg) => {
           setToast(msg);
           setTimeout(() => setToast(null), 2000);
         };
 
-        const handleSkip = (id) => {
-          setTasks((p) =>
-            p.map((t) => (t.id === id ? { ...t, status: "leaving" } : t)),
-          );
-          showToast("☁ 괜찮아, 내일 하면 돼!");
-          setTimeout(() => setTasks((p) => p.filter((t) => t.id !== id)), 450);
-        };
-        const handleDone = (id) => {
-          setTasks((p) =>
-            p.map((t) => (t.id === id ? { ...t, status: "leaving" } : t)),
-          );
-          setWaterCount((c) => c + 1);
-          showToast("✦ 잘했어요!");
-          setTimeout(() => setTasks((p) => p.filter((t) => t.id !== id)), 450);
-        };
-        const saveDiary = () => {
-          if (!diaryText.trim() || !diaryMood) return;
-          const entry = {
-            id: Date.now(),
-            mood: diaryMood,
-            text: diaryText,
-            date: "방금 전",
-          };
-          setDiaryEntries((p) => [entry, ...p]);
-          setDiaryText("");
-          setDiaryMood(null);
-          showToast("♥ 마음을 적었어요");
-        };
-        const releaseWorry = () => {
-          if (!worryInput.trim()) return;
-          const id = Date.now();
-          const text = worryInput;
-          setFloatingWorries((p) => [
-            ...p,
-            { id, text, x: 30 + Math.random() * 40 },
-          ]);
-          setWorryInput("");
-          setReleasedCount((c) => c + 1);
-          showToast("☁ 하늘로 보냈어요");
-          setTimeout(
-            () => setFloatingWorries((p) => p.filter((f) => f.id !== id)),
-            4000,
-          );
-        };
+        const isPerfect = useMemo(() => {
+          const activeList =
+            tasks[activeMonth]?.tasks.filter((t) => !t.isHeader) || [];
+          if (activeList.length === 0) return false;
+          return activeList.every((t) => t.checked);
+        }, [tasks, activeMonth]);
 
-        const sidebar = [
-          { id: "tasks", label: "TASKS", Icon: PixelTasksIcon },
-          { id: "garden", label: "GARDEN", Icon: PixelGardenIcon },
-          { id: "diary", label: "DIARY", Icon: PixelDiaryIcon },
-          { id: "sounds", label: "SOUNDS", Icon: PixelSoundsIcon },
-          { id: "bin", label: "WORRIES", Icon: PixelBinIcon },
-        ];
-        const titleByView = {
-          tasks: "TODAY'S CLOUDS",
-          garden: "HYDRANGEA GARDEN",
-          diary: "CLOUD DIARY",
-          sounds: "QUIET SOUNDS",
-          bin: "WORRY RELEASE",
-        };
+        if (authLoading) {
+          return (
+            <div className="h-screen w-full flex items-center justify-center bg-berry-bg">
+              <span className="text-6xl animate-bounce">🍓</span>
+            </div>
+          );
+        }
 
         return (
-          <>
-            <style>{`
-            @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;700&display=swap');
-
-            :root {
-              --teal: #7aa098;
-              --teal-pad: #5e8580;
-              --teal-deep: #4a6a64;
-              --cream: #d6cfa3;
-              --cream-light: #ebe4b8;
-              --cream-dark: #a8a070;
-              --olive: #6e8459;
-              --olive-light: #a4c089;
-              --olive-dark: #4a5e3c;
-              --olive-darker: #2c3a26;
-              --ink: #1a261c;
-              --rose: #b87798;
-              --rose-light: #e2a8c0;
-              --rose-deep: #8a4a6a;
-            }
-
-            .font-press   { font-family: 'Press Start 2P', monospace; line-height: 1.5; }
-            .font-pixelify{ font-family: 'Pixelify Sans', monospace; font-weight: 500; }
-
-            .text-olive       { color: var(--olive); }
-            .text-olive-dark  { color: var(--olive-dark); }
-            .text-olive-darker{ color: var(--olive-darker); }
-            .text-rose        { color: var(--rose); }
-            .text-rose-deep   { color: var(--rose-deep); }
-            .text-cream-light { color: var(--cream-light); }
-            .bg-teal          { background: var(--teal); }
-            .bg-teal-pad      { background: var(--teal-pad); }
-            .bg-cream         { background: var(--cream); }
-            .bg-olive         { background: var(--olive); }
-            .bg-rose          { background: var(--rose); }
-            .border-olive-dark{ border-color: var(--olive-dark); }
-
-            * { image-rendering: pixelated; }
-
-            .cloud-os {
-              background:
-                radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.08), transparent 50%),
-                linear-gradient(180deg, #82a8a0 0%, #7aa098 50%, #6e948c 100%);
-            }
-
-            .pixel-window {
-              background: var(--cream);
-              border: 2px solid var(--ink);
-              box-shadow:
-                inset 1px 1px 0 var(--cream-light),
-                inset -1px -1px 0 var(--cream-dark),
-                inset 2px 2px 0 var(--cream),
-                inset -2px -2px 0 var(--cream-dark),
-                3px 3px 0 rgba(20,30,25,0.35);
-            }
-            .title-bar {
-              background: linear-gradient(180deg, var(--olive) 0%, var(--olive-dark) 100%);
-              border-bottom: 2px solid var(--ink);
-              color: var(--olive-light);
-              padding: 4px 6px;
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-            }
-            .win-btn {
-              background: var(--cream);
-              border: 1px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark);
-              width: 18px; height: 16px;
-              font-family: 'Press Start 2P', monospace;
-              font-size: 8px;
-              color: var(--olive-darker);
-              display: inline-flex; align-items: center; justify-content: center;
-              line-height: 1;
-              cursor: pointer;
-            }
-            .win-btn:active {
-              box-shadow: inset -1px -1px 0 var(--cream-light), inset 1px 1px 0 var(--cream-dark);
-            }
-
-            .desktop-icon {
-              display: flex; flex-direction: column; align-items: center; gap: 4px;
-              padding: 6px 4px;
-              background: transparent;
-              border: 1px dashed transparent;
-              transition: all 0.2s;
-              cursor: pointer;
-              width: 64px;
-            }
-            .desktop-icon:hover { background: rgba(235,228,184,0.12); }
-            .desktop-icon.active {
-              background: rgba(235,228,184,0.22);
-              border: 1px dashed var(--cream-light);
-            }
-            .desktop-icon .icon-label {
-              font-family: 'Press Start 2P', monospace;
-              font-size: 7px;
-              color: var(--cream-light);
-              text-shadow: 1px 1px 0 var(--ink);
-              letter-spacing: 0.05em;
-            }
-            .desktop-icon.active .icon-label { color: #fff; }
-
-            .pixel-card {
-              background: var(--cream-light);
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 #f5e8c8, inset -1px -1px 0 var(--cream-dark);
-            }
-            .pixel-inset {
-              background: var(--cream);
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--cream-dark), inset -1px -1px 0 var(--cream-light);
-            }
-
-            .pixel-btn, .pixel-btn-sm {
-              border: 2px solid var(--ink);
-              font-family: 'Press Start 2P', monospace;
-              color: var(--olive-darker);
-              cursor: pointer;
-              transition: transform 0.06s;
-              display: inline-flex; align-items: center; justify-content: center;
-            }
-            .pixel-btn-cream {
-              background: var(--cream);
-              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark), 2px 2px 0 var(--ink);
-              color: var(--olive-darker);
-            }
-            .pixel-btn-cream:hover { background: var(--cream-light); }
-            .pixel-btn-cream:active {
-              box-shadow: inset -1px -1px 0 var(--cream-light), inset 1px 1px 0 var(--cream-dark);
-              transform: translate(2px, 2px);
-            }
-            .pixel-btn-rose {
-              background: var(--rose);
-              color: #fff;
-              box-shadow: inset 1px 1px 0 var(--rose-light), inset -1px -1px 0 var(--rose-deep), 2px 2px 0 var(--ink);
-            }
-            .pixel-btn-rose:hover { background: var(--rose-light); color: var(--rose-deep); }
-            .pixel-btn-rose:active {
-              box-shadow: inset -1px -1px 0 var(--rose-light), inset 1px 1px 0 var(--rose-deep);
-              transform: translate(2px, 2px);
-            }
-            .pixel-btn-sm { padding: 4px 6px; }
-
-            .pixel-chip {
-              display: flex; align-items: center; gap: 6px;
-              padding: 6px 10px;
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark);
-            }
-            .pixel-chip-rose { background: #f5d8e2; color: var(--rose-deep); }
-            .pixel-chip-sky  { background: #c8e0d8; color: var(--olive-dark); }
-
-            .pixel-task {
-              background: var(--cream);
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark);
-              padding: 8px 10px;
-              display: flex; align-items: center; gap: 10px;
-            }
-
-            .pixel-slider {
-              -webkit-appearance: none; appearance: none;
-              height: 14px; background: transparent; cursor: pointer;
-            }
-            .pixel-slider::-webkit-slider-runnable-track {
-              height: 12px;
-              background: var(--cream);
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--cream-dark);
-            }
-            .pixel-slider::-moz-range-track {
-              height: 12px;
-              background: var(--cream);
-              border: 2px solid var(--ink);
-            }
-            .pixel-slider::-webkit-slider-thumb {
-              -webkit-appearance: none; appearance: none;
-              width: 14px; height: 18px;
-              background: var(--rose);
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--rose-light), inset -1px -1px 0 var(--rose-deep);
-              margin-top: -5px;
-              cursor: pointer;
-            }
-            .pixel-slider::-moz-range-thumb {
-              width: 14px; height: 18px;
-              background: var(--rose);
-              border: 2px solid var(--ink);
-              cursor: pointer;
-            }
-
-            .pixel-textarea {
-              background: var(--cream);
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--cream-dark);
-              outline: none;
-            }
-            .pixel-textarea:focus { border-color: var(--rose); }
-            .pixel-textarea::placeholder { color: rgba(44, 58, 38, 0.45); }
-
-            .pixel-breath-circle {
-              width: 110px; height: 110px;
-              background: var(--rose-light);
-              border: 3px solid var(--ink);
-              box-shadow: inset 2px 2px 0 #fff, inset -2px -2px 0 var(--rose-deep), 4px 4px 0 var(--ink);
-              display: flex; align-items: center; justify-content: center;
-              color: var(--olive-darker);
-              transition: transform 1s ease-in-out, background 1s;
-            }
-
-            .taskbar {
-              background: var(--cream);
-              border-top: 2px solid var(--ink);
-              box-shadow: inset 0 1px 0 var(--cream-light), inset 0 -1px 0 var(--cream-dark);
-              display: flex; align-items: center;
-              padding: 3px 6px;
-              gap: 6px;
-            }
-            .start-btn {
-              background: var(--cream);
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--cream-light), inset -1px -1px 0 var(--cream-dark);
-              padding: 3px 8px;
-              display: flex; align-items: center; gap: 6px;
-              font-family: 'Press Start 2P', monospace;
-              font-size: 9px;
-              color: var(--olive-darker);
-              cursor: pointer;
-            }
-            .start-btn:active { box-shadow: inset -1px -1px 0 var(--cream-light), inset 1px 1px 0 var(--cream-dark); }
-            .taskbar-app {
-              flex: 1;
-              background: var(--olive);
-              border: 2px solid var(--ink);
-              box-shadow: inset -1px -1px 0 var(--olive-light), inset 1px 1px 0 var(--olive-dark);
-              padding: 3px 8px;
-              font-family: 'Press Start 2P', monospace;
-              font-size: 9px;
-              color: var(--olive-light);
-              display: flex; align-items: center; gap: 6px;
-              min-width: 0;
-            }
-            .taskbar-app > span:nth-child(2) {
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            }
-            .clock {
-              background: var(--cream);
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--cream-dark);
-              padding: 3px 10px;
-              font-family: 'Press Start 2P', monospace;
-              font-size: 9px;
-              color: var(--olive-darker);
-              flex-shrink: 0;
-            }
-
-            .lily-pad {
-              position: absolute;
-              background: var(--teal-pad);
-              border-radius: 50%;
-              opacity: 0.45;
-            }
-
-            @keyframes soft-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-            @keyframes vis      { 0%,100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
-            @keyframes breath   {
-              0%,100% { transform: scale(1); background: var(--rose-light); }
-              50% { transform: scale(1.4); background: #f5d8e2; }
-            }
-            @keyframes float-up {
-              0%   { opacity: 0; transform: translateY(0) scale(0.6); }
-              15%  { opacity: 1; transform: translateY(-30px) scale(1); }
-              85%  { opacity: 1; transform: translateY(-220px) scale(1.2); }
-              100% { opacity: 0; transform: translateY(-300px) scale(1.4); }
-            }
-            @keyframes fade-in  { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-            @keyframes view-in  { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
-            @keyframes toast-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
-            @keyframes pad-bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-
-            .anim-soft-bob { animation: soft-bob 3s ease-in-out infinite; }
-            .anim-vis      { animation: vis 0.6s ease-in-out infinite; transform-origin: bottom; }
-            .anim-breath   { animation: breath 8s ease-in-out infinite; }
-            .anim-float-up { animation: float-up 4s ease-out forwards; }
-            .anim-fade-in  { animation: fade-in 0.4s ease-out both; }
-            .anim-view-in  { animation: view-in 0.4s ease-out both; }
-            .anim-toast    { animation: toast-in 0.3s ease-out both; }
-            .anim-pad      { animation: pad-bob 6s ease-in-out infinite; }
-
-            .window-content::-webkit-scrollbar { width: 14px; }
-            .window-content::-webkit-scrollbar-track {
-              background: var(--cream-light);
-              border-left: 2px solid var(--ink);
-            }
-            .window-content::-webkit-scrollbar-thumb {
-              background: var(--olive);
-              border: 2px solid var(--ink);
-              box-shadow: inset 1px 1px 0 var(--olive-light), inset -1px -1px 0 var(--olive-dark);
-            }
-          `}</style>
-
-            <div className="cloud-os min-h-screen w-full flex flex-col font-pixelify relative overflow-hidden">
-              {/* DECORATIVE LILY PADS */}
-              <div
-                className="lily-pad anim-pad"
-                style={{ width: 180, height: 80, left: "8%", bottom: "20%" }}
-              />
-              <div
-                className="lily-pad anim-pad"
-                style={{
-                  width: 240,
-                  height: 100,
-                  right: "5%",
-                  bottom: "12%",
-                  animationDelay: "1.5s",
-                }}
-              />
-              <div
-                className="lily-pad anim-pad"
-                style={{
-                  width: 140,
-                  height: 60,
-                  left: "40%",
-                  top: "22%",
-                  animationDelay: "3s",
-                  opacity: 0.3,
-                }}
-              />
-              <div
-                className="lily-pad anim-pad"
-                style={{
-                  width: 90,
-                  height: 40,
-                  right: "30%",
-                  top: "8%",
-                  animationDelay: "2s",
-                  opacity: 0.35,
-                }}
-              />
-
-              <div className="absolute top-6 left-1/2 font-press text-[10px] text-cream-light opacity-50 select-none">
-                ▪ ▫ ▪
-              </div>
-              <div className="absolute bottom-20 right-10 font-press text-[10px] text-cream-light opacity-50 select-none">
-                ▫ ▪ ▫ ▫
-              </div>
-
-              {/* FLOATING RELEASED WORRIES */}
-              {floatingWorries.map((w) => (
-                <div
-                  key={w.id}
-                  className="absolute z-40 pointer-events-none anim-float-up flex flex-col items-center"
-                  style={{ left: `${w.x}%`, bottom: "30%" }}
-                >
-                  <PixelCloudIcon size={48} color="#ebe4b8" />
-                  <div className="pixel-inset px-2 py-1 mt-1 max-w-[160px] font-pixelify text-xs text-olive-darker">
-                    {w.text}
-                  </div>
-                </div>
-              ))}
-
-              <div className="flex-1 flex p-3 sm:p-4 gap-3 sm:gap-4 overflow-hidden relative z-10">
-                {/* SIDEBAR */}
-                <aside className="flex flex-col gap-2 sm:gap-3 flex-shrink-0">
-                  {sidebar.map((item) => {
-                    const Icon = item.Icon;
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => setActiveView(item.id)}
-                        className={`desktop-icon ${activeView === item.id ? "active" : ""}`}
-                      >
-                        <Icon size={36} />
-                        <div className="icon-label">{item.label}</div>
-                      </button>
-                    );
-                  })}
-                </aside>
-
-                {/* MAIN PIXEL WINDOW */}
-                <main className="pixel-window flex-1 flex flex-col min-w-0">
-                  <div className="title-bar">
-                    <span className="font-press text-[10px] sm:text-xs flex items-center gap-2 truncate">
-                      <span>☁</span>
-                      <span className="truncate">
-                        {titleByView[activeView]}
-                      </span>
-                    </span>
-                    <div className="flex gap-1 flex-shrink-0">
-                      <button className="win-btn">_</button>
-                      <button className="win-btn">▢</button>
-                      <button className="win-btn">×</button>
-                    </div>
-                  </div>
-                  <div className="window-content flex-1 overflow-y-auto p-3 sm:p-4">
-                    <div key={activeView} className="anim-view-in">
-                      {activeView === "tasks" && (
-                        <TasksView
-                          energy={energy}
-                          setEnergy={setEnergy}
-                          tasks={tasks}
-                          handleSkip={handleSkip}
-                          handleDone={handleDone}
-                          hydrangea={hydrangea}
-                          waterCount={waterCount}
-                          isMicroMode={isMicroMode}
-                        />
-                      )}
-                      {activeView === "garden" && (
-                        <GardenView
-                          waterCount={waterCount}
-                          hydrangea={hydrangea}
-                          setWaterCount={setWaterCount}
-                          showToast={showToast}
-                        />
-                      )}
-                      {activeView === "diary" && (
-                        <DiaryView
-                          mood={diaryMood}
-                          setMood={setDiaryMood}
-                          text={diaryText}
-                          setText={setDiaryText}
-                          entries={diaryEntries}
-                          save={saveDiary}
-                        />
-                      )}
-                      {activeView === "sounds" && (
-                        <SoundsView
-                          playingTrack={playingTrack}
-                          setPlayingTrack={setPlayingTrack}
-                          breathing={breathing}
-                          setBreathing={setBreathing}
-                          showToast={showToast}
-                        />
-                      )}
-                      {activeView === "bin" && (
-                        <BinView
-                          worryInput={worryInput}
-                          setWorryInput={setWorryInput}
-                          releasedCount={releasedCount}
-                          releaseWorry={releaseWorry}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </main>
-              </div>
-
-              {/* TASKBAR */}
-              <footer className="taskbar relative z-10">
-                <button className="start-btn">
-                  <PixelStartIcon size={14} />
-                  <span>START</span>
-                </button>
-                <div className="taskbar-app">
-                  <span>☁</span>
-                  <span>{titleByView[activeView]}</span>
-                </div>
-                <div className="clock">{time}</div>
-              </footer>
-
-              {/* TOAST */}
-              {toast && (
-                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
-                  <div className="pixel-card px-4 py-2 anim-toast">
-                    <span className="font-pixelify text-base text-olive-darker">
-                      {toast}
-                    </span>
-                  </div>
-                </div>
-              )}
+          <div className="min-h-screen relative pb-20 md:pb-8 flex flex-col items-center p-4 sm:p-6 overflow-x-hidden">
+            <div className="fixed top-10 left-10 text-3xl opacity-50 z-0 select-none">
+              🍓
             </div>
-          </>
+            <div className="fixed bottom-32 right-10 text-4xl opacity-50 z-0 select-none">
+              🥛
+            </div>
+            <div className="fixed top-40 right-20 text-2xl opacity-50 z-0 select-none">
+              ✨
+            </div>
+            <div className="fixed bottom-20 left-20 text-3xl opacity-50 z-0 select-none">
+              🎀
+            </div>
+
+            <div className="w-full max-w-4xl relative z-10 flex flex-col gap-6 mt-4">
+              <header className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-4">
+                <div className="hidden sm:block">
+                  <TamagotchiWidget time={time} isPerfect={isPerfect} />
+                </div>
+                <div className="berry-card bg-berry-cream p-4 sm:px-8 sm:py-6 flex-1 w-full text-center sm:text-left flex items-center justify-center sm:justify-start gap-4">
+                  <span className="text-4xl sm:text-5xl">🥛</span>
+                  <div>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-berry-dark drop-shadow-sm mb-1">
+                      ANGELA'S STRAWBERRY DIARY
+                    </h1>
+                    <p className="text-xs sm:text-sm font-bold text-berry-choco opacity-70">
+                      2026 Master Roadmap Planner 🍓
+                    </p>
+                  </div>
+                </div>
+                <DDayWidget />
+              </header>
+
+              <nav className="flex gap-2 sm:gap-3 justify-start sm:justify-start w-full overflow-x-auto pb-2 hide-scrollbar">
+                <button
+                  onClick={() => setActiveView("overview")}
+                  className={`berry-btn px-4 sm:px-5 py-2 sm:py-3 text-sm sm:text-base font-bold flex items-center gap-2 whitespace-nowrap shrink-0 ${activeView === "overview" ? "berry-btn-active" : ""}`}
+                >
+                  <span>⭐</span> 북극성
+                </button>
+                <button
+                  onClick={() => setActiveView("finance")}
+                  className={`berry-btn px-4 sm:px-5 py-2 sm:py-3 text-sm sm:text-base font-bold flex items-center gap-2 whitespace-nowrap shrink-0 ${activeView === "finance" ? "berry-btn-active" : ""}`}
+                >
+                  <span>💰</span> 재무
+                </button>
+                <button
+                  onClick={() => setActiveView("timeline")}
+                  className={`berry-btn px-4 sm:px-5 py-2 sm:py-3 text-sm sm:text-base font-bold flex items-center gap-2 whitespace-nowrap shrink-0 ${activeView === "timeline" ? "berry-btn-active" : ""}`}
+                >
+                  <span>📅</span> 타임라인
+                </button>
+                <button
+                  onClick={() => setActiveView("vocab")}
+                  className={`berry-btn px-4 sm:px-5 py-2 sm:py-3 text-sm sm:text-base font-bold flex items-center gap-2 whitespace-nowrap shrink-0 ${activeView === "vocab" ? "berry-btn-active" : ""}`}
+                >
+                  <span>📖</span> 단어장
+                </button>
+              </nav>
+
+              <main className="w-full min-h-[400px]">
+                {activeView === "overview" && (
+                  <OverviewView showToast={showToast} user={user} />
+                )}
+                {activeView === "finance" && (
+                  <FinanceView showToast={showToast} user={user} />
+                )}
+                {activeView === "timeline" && (
+                  <TimelineView
+                    tasks={tasks}
+                    setTasks={setTasks}
+                    activeMonth={activeMonth}
+                    setActiveMonth={setActiveMonth}
+                    showToast={showToast}
+                  />
+                )}
+                {activeView === "vocab" && (
+                  <VocabView showToast={showToast} user={user} />
+                )}
+              </main>
+            </div>
+
+            {toast && (
+              <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
+                <div className="anim-toast bg-white border-4 border-berry-dark rounded-3xl px-8 py-4 shadow-[0_10px_20px_rgba(255,77,109,0.3)] flex items-center gap-3">
+                  <span className="font-bold text-xl text-berry-dark">
+                    {toast}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <style jsx global>{`
+              .hide-scrollbar::-webkit-scrollbar {
+                display: none;
+              }
+              .hide-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+              }
+              @keyframes popIn {
+                0% {
+                  opacity: 0;
+                  transform: translateY(10px) scale(0.98);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateY(0) scale(1);
+                }
+              }
+            `}</style>
+          </div>
         );
       }
 
